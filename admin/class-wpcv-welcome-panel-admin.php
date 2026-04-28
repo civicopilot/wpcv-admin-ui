@@ -168,7 +168,18 @@ class Wpcv_Welcome_Panel_Admin {
 	 * @return   array
 	 */
 	private function get_settings_cards() {
-		return array_slice( Wpcv_Welcome_Panel_Cards::get_configured_cards(), 0, 6 );
+		$stored_cards = array_slice( Wpcv_Welcome_Panel_Settings::get_stored_cards(), 0, 6 );
+		$cards        = array();
+
+		foreach ( $stored_cards as $card ) {
+			if ( ! is_array( $card ) ) {
+				continue;
+			}
+
+			$cards[] = Wpcv_Welcome_Panel_Cards::normalize_card( $card );
+		}
+
+		return $cards;
 	}
 
 	/**
@@ -240,6 +251,20 @@ class Wpcv_Welcome_Panel_Admin {
 	}
 
 	/**
+	 * Return invalid card numbers from the last save attempt.
+	 *
+	 * @since    1.0.0
+	 * @return   array
+	 */
+	private function get_invalid_url_notice_cards() {
+		$card_numbers = is_multisite()
+			? get_site_transient( 'wpcv_welcome_panel_invalid_url_notice' )
+			: get_transient( 'wpcv_welcome_panel_invalid_url_notice' );
+
+		return is_array( $card_numbers ) ? $card_numbers : array();
+	}
+
+	/**
 	 * Clear the settings saved notice.
 	 *
 	 * @since    1.0.0
@@ -252,6 +277,21 @@ class Wpcv_Welcome_Panel_Admin {
 		}
 
 		delete_transient( 'wpcv_welcome_panel_updated_notice' );
+	}
+
+	/**
+	 * Clear the invalid URL notice.
+	 *
+	 * @since    1.0.0
+	 * @return   void
+	 */
+	private function clear_invalid_url_notice() {
+		if ( is_multisite() ) {
+			delete_site_transient( 'wpcv_welcome_panel_invalid_url_notice' );
+			return;
+		}
+
+		delete_transient( 'wpcv_welcome_panel_invalid_url_notice' );
 	}
 
 	/**
@@ -270,6 +310,33 @@ class Wpcv_Welcome_Panel_Admin {
 	}
 
 	/**
+	 * Set the invalid URL notice card numbers.
+	 *
+	 * @since    1.0.0
+	 * @param    array $card_numbers Invalid card numbers.
+	 * @return   void
+	 */
+	private function set_invalid_url_notice( $card_numbers ) {
+		$card_numbers = array_values(
+			array_filter(
+				array_map( 'absint', $card_numbers )
+			)
+		);
+
+		if ( empty( $card_numbers ) ) {
+			$this->clear_invalid_url_notice();
+			return;
+		}
+
+		if ( is_multisite() ) {
+			set_site_transient( 'wpcv_welcome_panel_invalid_url_notice', $card_numbers, 30 );
+			return;
+		}
+
+		set_transient( 'wpcv_welcome_panel_invalid_url_notice', $card_numbers, 30 );
+	}
+
+	/**
 	 * Parse cards posted from the custom network settings form.
 	 *
 	 * @since    1.0.0
@@ -281,30 +348,43 @@ class Wpcv_Welcome_Panel_Admin {
 		$descriptions = isset( $posted_data['card_description'] ) && is_array( $posted_data['card_description'] ) ? $posted_data['card_description'] : array();
 		$urls         = isset( $posted_data['card_url'] ) && is_array( $posted_data['card_url'] ) ? $posted_data['card_url'] : array();
 		$access_rules = isset( $posted_data['card_access_rule'] ) && is_array( $posted_data['card_access_rule'] ) ? $posted_data['card_access_rule'] : array();
-		$cards      = array();
+		$cards             = array();
+		$invalid_card_urls = array();
 
 		for ( $i = 0; $i < 6; $i++ ) {
+			$raw_url = isset( $urls[ $i ] ) ? $urls[ $i ] : '';
 			$card = Wpcv_Welcome_Panel_Cards::normalize_card(
 				array(
 					'title'       => isset( $titles[ $i ] ) ? $titles[ $i ] : '',
 					'description' => isset( $descriptions[ $i ] ) ? $descriptions[ $i ] : '',
-					'url'         => isset( $urls[ $i ] ) ? $urls[ $i ] : '',
+					'url'         => $raw_url,
 					'access_rule' => isset( $access_rules[ $i ] ) ? $access_rules[ $i ] : 'everyone',
 				)
 			);
+
+			if ( '' !== trim( (string) $raw_url ) && '' === $card['url'] ) {
+				$invalid_card_urls[] = $i + 1;
+			}
 
 			if ( '' === $card['title'] && '' === $card['description'] && '' === $card['url'] ) {
 				continue;
 			}
 
-			if ( '' === $card['title'] || '' === $card['url'] ) {
+			if ( '' === $card['title'] ) {
+				continue;
+			}
+
+			if ( '' === $card['url'] && ! in_array( $i + 1, $invalid_card_urls, true ) ) {
 				continue;
 			}
 
 			$cards[] = $card;
 		}
 
-		return $cards;
+		return array(
+			'cards'             => $cards,
+			'invalid_card_urls' => $invalid_card_urls,
+		);
 	}
 
 	/**
@@ -327,6 +407,23 @@ class Wpcv_Welcome_Panel_Admin {
 					<p><?php esc_html_e( 'Welcome panel settings saved.', 'wpcv-welcome-panel' ); ?></p>
 				</div>
 			<?php endif; ?>
+			<?php $invalid_url_cards = $this->get_invalid_url_notice_cards(); ?>
+			<?php if ( ! empty( $invalid_url_cards ) ) : ?>
+				<?php $this->clear_invalid_url_notice(); ?>
+				<div class="notice notice-warning is-dismissible">
+					<p>
+						<?php
+						echo esc_html(
+							sprintf(
+								/* translators: %s: Card numbers with invalid relative admin URLs. */
+								__( 'Card URLs not saved for card(s) %s. Use a relative admin URL beginning with /.', 'wpcv-welcome-panel' ),
+								implode( ', ', $invalid_url_cards )
+							)
+						);
+						?>
+					</p>
+				</div>
+			<?php endif; ?>
 
 			<?php
 			$cards               = $this->get_settings_cards();
@@ -335,7 +432,10 @@ class Wpcv_Welcome_Panel_Admin {
 			$access_rule_choices = $this->get_access_rule_choices();
 			?>
 			<div class="notice notice-info inline">
-				<p><?php esc_html_e( 'Manage dashboard cards here. You can save up to 6 cards. Access Rule is optional. If selected, the card only shows for users with that required capability.', 'wpcv-welcome-panel' ); ?></p>
+				<p><?php esc_html_e( 'Manage up to 6 dashboard cards. Access Rule is optional. If selected, the card only shows for users with that required capability.', 'wpcv-welcome-panel' ); ?></p>
+				<?php if ( is_multisite() ) : ?>
+					<p><?php esc_html_e( 'Ensure you use relative URLs that work across every subsite (global). Site-specific report or page URLs should not be used.', 'wpcv-welcome-panel' ); ?></p>
+				<?php endif; ?>
 			</div>
 
 			<form method="post" action="<?php echo esc_url( $this->get_settings_form_action() ); ?>" class="wpcv-welcome-panel-settings-form">
@@ -393,9 +493,8 @@ class Wpcv_Welcome_Panel_Admin {
 								</p>
 
 								<p>
-									<label for="wpcv-welcome-panel-card-url-<?php echo esc_attr( $i ); ?>"><?php esc_html_e( 'Link', 'wpcv-welcome-panel' ); ?></label>
-									<input type="text" id="wpcv-welcome-panel-card-url-<?php echo esc_attr( $i ); ?>" name="card_url[]" value="<?php echo esc_attr( isset( $card['url'] ) ? $card['url'] : '' ); ?>" class="regular-text" />
-									<span class="description"><?php esc_html_e( 'Use relative internal path such as /wp-admin/admin.php?page=CiviCRM&q=civicrm%2Fcontribute&reset=1', 'wpcv-welcome-panel' ); ?></span>
+									<label for="wpcv-welcome-panel-card-url-<?php echo esc_attr( $i ); ?>"><?php esc_html_e( 'Relative Admin URL', 'wpcv-welcome-panel' ); ?></label>
+									<input type="text" id="wpcv-welcome-panel-card-url-<?php echo esc_attr( $i ); ?>" name="card_url[]" value="<?php echo esc_attr( isset( $card['url'] ) ? $card['url'] : '' ); ?>" class="regular-text" placeholder="/wp-admin/admin.php?page=CiviCRM&q=civicrm%2Fvolunteers" />
 								</p>
 
 								<p>
@@ -441,7 +540,9 @@ class Wpcv_Welcome_Panel_Admin {
 
 		check_admin_referer( 'wpcv_welcome_panel_save_settings', 'wpcv_welcome_panel_nonce' );
 		$posted_data       = wp_unslash( $_POST );
-		$cards             = $this->parse_posted_cards( $posted_data );
+		$parsed_cards      = $this->parse_posted_cards( $posted_data );
+		$cards             = isset( $parsed_cards['cards'] ) ? $parsed_cards['cards'] : array();
+		$invalid_card_urls = isset( $parsed_cards['invalid_card_urls'] ) ? $parsed_cards['invalid_card_urls'] : array();
 		$subheading        = isset( $posted_data['subheading'] ) ? sanitize_text_field( $posted_data['subheading'] ) : '';
 		$background_color  = isset( $posted_data['background_color'] ) ? sanitize_hex_color( $posted_data['background_color'] ) : '';
 
@@ -464,6 +565,7 @@ class Wpcv_Welcome_Panel_Admin {
 		}
 
 		$this->set_updated_notice();
+		$this->set_invalid_url_notice( $invalid_card_urls );
 
 		wp_safe_redirect( $this->get_settings_page_url() );
 		exit;

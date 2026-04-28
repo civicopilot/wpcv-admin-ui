@@ -99,9 +99,38 @@ class Wpcv_Welcome_Panel_Cards {
 			'icon'        => self::get_icon_for_access_rule( $access_rule ),
 			'title'       => isset( $card['title'] ) ? sanitize_text_field( $card['title'] ) : '',
 			'description' => isset( $card['description'] ) ? sanitize_textarea_field( $card['description'] ) : '',
-			'url'         => isset( $card['url'] ) ? esc_url_raw( $card['url'] ) : '',
+			'url'         => isset( $card['url'] ) ? self::sanitize_relative_admin_url( $card['url'] ) : '',
 			'access_rule' => $access_rule,
 		);
+	}
+
+	/**
+	 * Sanitize a stored relative admin URL.
+	 *
+	 * Only root-relative paths are supported so network-wide settings can resolve
+	 * correctly on each subsite domain.
+	 *
+	 * @since    1.0.0
+	 * @param    string $url Raw URL value.
+	 * @return   string
+	 */
+	public static function sanitize_relative_admin_url( $url ) {
+		if ( ! is_string( $url ) ) {
+			return '';
+		}
+
+		$url = trim( wp_unslash( $url ) );
+
+		if ( '' === $url || 0 !== strpos( $url, '/' ) ) {
+			return '';
+		}
+
+		// Reject absolute and protocol-relative URLs. This field is for internal paths only.
+		if ( preg_match( '#^(//|[a-z][a-z0-9+.-]*://)#i', $url ) ) {
+			return '';
+		}
+
+		return esc_url_raw( $url );
 	}
 
 	/**
