@@ -3,8 +3,6 @@
  * included in this file.
  */
  
-.welcome-panel::before {background: none !important;}
-.welcome-panel .welcome-panel-close {display:none;}
 #wpcv_welcome_panel_widget {
 	display: none;
 }
@@ -31,9 +29,6 @@
 .welcome-panel .welcome-panel-column-container {padding:24px !important;}
 .welcome-panel [class*="welcome-panel-icon"] {
 	background-color: #0c0c0c;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: 24px 24px;
 	height: 40px;
 	width: 40px;
 }
@@ -62,14 +57,6 @@
 
 .welcome-panel .welcome-panel-icon-mail {
 	background-image:url('../assets/images/mail.svg');
-}
-
-.welcome-panel .welcome-panel-icon-volunteers {
-	background-image:url('../assets/images/volunteer-thumbs-up.svg');
-}
-
-.welcome-panel .welcome-panel-icon-signups {
-	background-image:url('../assets/images/signup-list.svg');
 }
 
 .welcome-panel .welcome-panel-icon-contributions {
@@ -137,7 +124,6 @@
 }
 
 .wpcv-welcome-panel-settings-grid input[type="text"],
-.wpcv-welcome-panel-settings-grid input[type="url"],
 .wpcv-welcome-panel-settings-grid select,
 .wpcv-welcome-panel-settings-grid textarea {
 	width: 100%;

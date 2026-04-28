@@ -43,7 +43,7 @@
 		$list.on( 'click', '[data-remove-card]', function() {
 			var $row = $( this ).closest( '[data-card-row]' );
 
-			$row.find( 'input[type="text"], input[type="url"], textarea' ).val( '' );
+			$row.find( 'input[type="text"], textarea' ).val( '' );
 			$row.find( 'select' ).prop( 'selectedIndex', 0 );
 			$row.addClass( 'is-empty' );
 			updateRowTitles();
