@@ -1,0 +1,16 @@
+/* Style content-type labels in the Activity widget. */
+#dashboard_activity .wpcv-activity-title {
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+#dashboard_activity .wpcv-activity-type {
+	display: inline-block;
+	margin-inline-start: 8px;
+	white-space: nowrap;
+	padding: 1px 6px;
+	border-radius: 3px;
+	background: rgba(var(--wp-admin-theme-color--rgb, 56, 88, 233), 0.08);
+	color: inherit;
+	font-size: 11px;
+	line-height: 1.6;
+}

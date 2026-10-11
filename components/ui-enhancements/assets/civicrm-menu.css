@@ -1,0 +1,4 @@
+/* Hide the CiviCRM Home/logo menu, including its submenu. */
+#civicrm-menu > li[data-name="Home"] {
+	display: none;
+}
