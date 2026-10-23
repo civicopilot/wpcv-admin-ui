@@ -3,7 +3,9 @@
 class Wpcv_Admin_Settings_Page {
 	private $components;
 	private $page_hook;
+
 	public function __construct( $components ) { $this->components = $components; }
+
 	/** Connect the settings screen and save handler to WordPress. */
 	public function register_hooks() {
 		$plugin = plugin_basename( dirname( __DIR__ ) . '/wpcv-admin.php' );
@@ -15,6 +17,7 @@ class Wpcv_Admin_Settings_Page {
 		add_action( 'admin_post_wpcv_admin_save_settings', array( $this, 'save_settings' ) );
 		add_action( 'network_admin_edit_wpcv_admin_save_settings', array( $this, 'save_settings' ) );
 	}
+
 	/** Add a plugin-row Settings link only for users who can manage settings. */
 	public function settings_link( $links ) {
 		if ( Wpcv_Admin_Settings::user_can_manage_settings() ) {
@@ -22,34 +25,62 @@ class Wpcv_Admin_Settings_Page {
 		}
 		return $links;
 	}
+
 	/** Add local settings on single-site installations. */
 	public function add_admin_page() {
 		if ( ! is_multisite() ) {
 			$this->page_hook = add_options_page( __( 'WPCV Admin Enhancements', 'wpcv-admin' ), __( 'WPCV Admin Enhancements', 'wpcv-admin' ), 'manage_options', 'wpcv-admin', array( $this, 'render' ) );
 		}
 	}
+
 	/** Keep multisite settings in Network Admin. */
 	public function add_network_admin_page() {
 		if ( is_multisite() ) {
 			$this->page_hook = add_submenu_page( 'settings.php', __( 'WPCV Admin Enhancements', 'wpcv-admin' ), __( 'WPCV Admin Enhancements', 'wpcv-admin' ), 'manage_network_options', 'wpcv-admin', array( $this, 'render' ) );
 		}
 	}
+
 	/** Load shared and component settings assets only on this page. */
 	public function enqueue( $hook ) {
 		if ( ! $this->page_hook || $hook !== $this->page_hook ) { return; }
 		wp_enqueue_script( 'wpcv-admin-settings', plugin_dir_url( __FILE__ ) . 'assets/settings-page.js', array( 'jquery', 'postbox' ), filemtime( __DIR__ . '/assets/settings-page.js' ), true );
-		foreach ( $this->components as $component ) { $component::enqueue_settings(); }
+		$settings = Wpcv_Admin_Settings::get_settings();
+		foreach ( $this->components as $component ) {
+			$enabled_setting = $component['enabled_setting'];
+			if ( empty( $settings[ $enabled_setting ] ) ) {
+				continue;
+			}
+			$component_class = $component['class'];
+			$component_class::enqueue_settings();
+		}
 	}
+
 	/** Check access, ask components for their metaboxes, and render the form. */
 	public function render() {
 		if ( ! Wpcv_Admin_Settings::user_can_manage_settings() ) {
 			wp_die( esc_html__( 'You do not have permission to access this page.', 'wpcv-admin' ) );
 		}
 		$screen_id = get_current_screen()->id;
-		foreach ( $this->components as $component ) { $component::register_settings( $screen_id ); }
+		$settings = Wpcv_Admin_Settings::get_settings();
+		add_meta_box( 'wpcv-components', __( 'Components', 'wpcv-admin' ), array( $this, 'render_components' ), $screen_id, 'side', 'high' );
+		foreach ( $this->components as $component ) {
+			$enabled_setting = $component['enabled_setting'];
+			if ( empty( $settings[ $enabled_setting ] ) ) {
+				continue;
+			}
+			$component_class = $component['class'];
+			$component_class::register_settings( $screen_id );
+		}
 		$action = is_multisite() ? network_admin_url( 'edit.php?action=wpcv_admin_save_settings' ) : admin_url( 'admin-post.php?action=wpcv_admin_save_settings' );
 		include __DIR__ . '/templates/settings-page.php';
 	}
+
+	/** Show component switches */
+	public function render_components() {
+		$settings = Wpcv_Admin_Settings::get_settings();
+		include __DIR__ . '/templates/components.php';
+	}
+
 	/** Validate submitted components before saving; omitted components retain their values. */
 	public function save_settings() {
 		if ( ! Wpcv_Admin_Settings::user_can_manage_settings() ) {
@@ -57,15 +88,27 @@ class Wpcv_Admin_Settings_Page {
 		}
 		check_admin_referer( 'wpcv_admin_save_settings', 'wpcv_admin_nonce' );
 		$post = wp_unslash( $_POST );
+
 		// Start from saved values so disabled or omitted component fields are retained.
 		$settings = Wpcv_Admin_Settings::get_settings();
 		foreach ( $this->components as $component ) {
-			$values = $component::validate_settings( $post );
+			$enabled_setting = $component['enabled_setting'];
+
+			// Save switches first; disabling a component preserves its configuration.
+			if ( isset( $post['wpcv_components_submitted'] ) ) {
+				$settings[ $enabled_setting ] = isset( $post[ $enabled_setting ] ) && '1' === $post[ $enabled_setting ];
+			}
+			if ( empty( $settings[ $enabled_setting ] ) ) {
+				continue;
+			}
+			$component_class = $component['class'];
+			$values = $component_class::validate_settings( $post );
 			if ( is_wp_error( $values ) ) {
 				wp_die( esc_html( $values->get_error_message() ), '', array( 'response' => 400, 'back_link' => true ) );
 			}
 			$settings = array_merge( $settings, $values );
 		}
+
 		// Write once, after all submitted components pass validation.
 		Wpcv_Admin_Settings::update_settings( $settings );
 		wp_safe_redirect( add_query_arg( 'updated', '1', Wpcv_Admin_Settings::get_settings_page_url() ) );

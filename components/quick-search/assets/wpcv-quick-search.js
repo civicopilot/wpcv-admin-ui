@@ -19,15 +19,18 @@ document.addEventListener('DOMContentLoaded', function () {
 			window.location.assign(url.href);
 		});
 		var search = input.closest('.wpcv-quick-search');
+
 		// Capture outside clicks before Select2's overlay stops propagation.
 		document.addEventListener('click', function (event) {
 			if (search.contains(event.target) || event.target.closest('.wpcv-quick-search-dropdown')) return;
+
 			// Select2 restores focus when closing; release it after that handler finishes.
 			// Keyboard dismissal has no click, so Escape keeps its focus ring.
 			window.setTimeout(function () {
 				if (search.contains(document.activeElement)) document.activeElement.blur();
 			}, 0);
 		}, true);
+
 		// This class also hides a CiviCRM menu inserted later by its AJAX loader.
 		document.body.classList.add('wpcv-quick-search-ready');
 	} catch (error) {

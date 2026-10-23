@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 	<input type="hidden" name="wpcv_quick_search_submitted" value="1">
 	<p><label for="wpcv-quick-search-display"><strong><?php esc_html_e( 'Quick Search Autocomplete', 'wpcv-admin' ); ?></strong></label></p>
 	<select id="wpcv-quick-search-display" name="quick_search_display" aria-describedby="wpcv-quick-search-help">
-		<option value="" <?php selected( '', $selected_key ); ?>><?php esc_html_e( '— Hide Quick Search —', 'wpcv-admin' ); ?></option>
+		<option value="" <?php selected( '', $selected_key ); ?>><?php esc_html_e( '— Select a display —', 'wpcv-admin' ); ?></option>
 		<?php if ( $selected_key && ( is_wp_error( $displays ) || $unavailable ) ) : ?>
 			<option value="<?php echo esc_attr( $selected_key ); ?>" selected><?php echo esc_html( sprintf( __( '%1$s (%2$s) — unavailable', 'wpcv-admin' ), $selection['display'], $selection['saved_search'] ) ); ?></option>
 		<?php endif; ?>
@@ -22,8 +22,9 @@ defined( 'ABSPATH' ) || exit;
 <p id="wpcv-quick-search-help" class="description">
 	<?php
 	printf(
+
 		/* translators: %s: Link to the companion CiviCRM extension. */
-		esc_html__( 'Choose a Contact autocomplete display, or install and enable %s for a turn-key search out of the box. Choosing "Hide Quick Search" disables the admin-bar contact search.', 'wpcv-admin' ),
+		esc_html__( 'Choose a Contact autocomplete display, or install and enable %s for a turn-key search out of the box.', 'wpcv-admin' ),
 		'<a href="' . esc_url( 'https://github.com/civicopilot/wpcvquicksearch' ) . '">WPCV Quick Search</a>'
 	);
 	?>

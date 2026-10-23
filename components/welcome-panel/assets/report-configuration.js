@@ -7,7 +7,9 @@
 		var max = Number(list.dataset.maxCards);
 		var search = document.getElementById('wpcv-afform-search');
 		var status = document.getElementById('wpcv-afform-search-status');
+
 		// Filter locally and enforce the selection limit without clearing checked inputs.
+
 		function refresh() {
 			var term = search ? search.value.trim().toLocaleLowerCase() : '';
 			var checked = list.querySelectorAll('input:checked').length;
@@ -17,6 +19,7 @@
 				var match = (row.dataset.search || row.textContent).toLocaleLowerCase().includes(term);
 				if (match) matches++;
 				checkbox.disabled = !checkbox.checked && checked >= max;
+
 				// Hidden checked inputs still submit in their saved order.
 				row.hidden = !match;
 			});
@@ -31,6 +34,7 @@
 		}
 		$(list).on('change', 'input', refresh);
 		refresh();
+
 		// Drag changes DOM order, which is also the order submitted on save.
 		if ($.fn.sortable) {
 			$(list).sortable({

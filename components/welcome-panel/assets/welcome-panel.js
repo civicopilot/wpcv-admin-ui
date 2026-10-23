@@ -11,11 +11,13 @@
 			if (persist) {
 				visibility.prop('checked', true).prop('disabled', true);
 			}
+
 			function updateVisibility() {
 				panel.toggle(persist || !visibility.length || visibility.prop('checked'));
 			}
 			visibility.on('change', updateVisibility);
 			updateVisibility();
+
 			// Resolve the CSS variable in the browser, including the CiviCRM theme default.
 			var context = document.createElement('canvas').getContext('2d');
 			if (context) {
@@ -27,10 +29,12 @@
 					return value <= 0.04045 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4);
 				});
 				var luminance = channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+
 				// Choose whichever of black or white has the higher contrast ratio.
 				var foreground = (luminance + 0.05) / 0.05 > 1.05 / (luminance + 0.05) ? '#000' : '#fff';
 				panel[0].style.setProperty('--wpcv-admin-foreground', foreground);
 			}
+
 			// Retain the registered widget so WordPress can save its visibility preference.
 		}
 	});

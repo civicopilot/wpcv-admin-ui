@@ -28,6 +28,7 @@ class Wpcv_Admin_Afforms {
 				->addWhere( 'server_route', 'IS NOT EMPTY' )
 				->addOrderBy( 'title', 'ASC' )
 				->setLimit( 0 );
+
 			// Restrict dashboard and validation queries to the selected names.
 			if ( null !== $names ) {
 				if ( empty( $names ) ) {
@@ -35,6 +36,7 @@ class Wpcv_Admin_Afforms {
 				}
 				$query->addWhere( 'name', 'IN', $names );
 			}
+
 			// Index results by name so callers can restore the saved order.
 			$forms = array();
 			foreach ( $query->execute() as $form ) {

@@ -12,16 +12,21 @@ class Wpcv_Admin_UI_Enhancements {
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_menu_styles' ) );
 	}
+
 	/** Default to posts and preserve the existing hidden logo menu. */
-	public static function defaults() { return array( 'activity_post_types' => array( 'post' ), 'remove_civicrm_icon_menu' => true, 'consolidate_civicrm_menu' => false ); }
+	public static function defaults() { return array( 'ui_enhancements_enabled' => true, 'activity_post_types' => array( 'post' ), 'remove_civicrm_icon_menu' => true, 'consolidate_civicrm_menu' => false ); }
+
 	/** Add the UI Enhancements configuration metabox. */
 	public static function register_settings( $screen_id ) {
 		add_meta_box( 'wpcv-dashboard-enhancements', __( 'UI Enhancements', 'wpcv-admin' ), array( __CLASS__, 'render_settings' ), $screen_id, 'normal', 'default' );
 	}
+
 	/** Display the available content types and saved choices. */
 	public static function render_settings() { include __DIR__ . '/templates/settings.php'; }
+
 	/** The checkbox settings need no additional assets. */
 	public static function enqueue_settings() {}
+
 	/** Preserve omitted settings and accept only available content types. */
 	public static function validate_settings( $post ) {
 		if ( ! isset( $post['wpcv_ui_enhancements_submitted'] ) ) { return array(); }
@@ -32,6 +37,7 @@ class Wpcv_Admin_UI_Enhancements {
 			'remove_civicrm_icon_menu' => isset( $post['remove_civicrm_icon_menu'] ) && '1' === $post['remove_civicrm_icon_menu'],
 		);
 	}
+
 	/** Hide the logo menu before paint only when the checkbox is enabled. */
 	public static function enqueue_menu_styles() {
 		$settings = Wpcv_Admin_Settings::get_settings();
@@ -67,6 +73,7 @@ class Wpcv_Admin_UI_Enhancements {
 		$selected = is_array( $settings['activity_post_types'] ) ? $settings['activity_post_types'] : array();
 		$available = self::post_types();
 		$types = array();
+
 		// Use only locally registered types the user can edit.
 		foreach ( $available as $name => $type ) {
 			if ( in_array( $name, $selected, true ) && current_user_can( $type->cap->edit_posts ) ) {
@@ -104,6 +111,7 @@ class Wpcv_Admin_UI_Enhancements {
 				$labels[ $url ] = $type->labels->singular_name;
 			}
 		}
+
 		// Pass labels to the footer script without another database query.
 		wp_add_inline_script(
 			'wpcv-dashboard-activity',

@@ -9,10 +9,12 @@ class Wpcv_Admin_Quick_Search {
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue' ) );
 		add_action( 'admin_bar_menu', array( __CLASS__, 'admin_bar' ), 11 );
 	}
+
 	/** Null means never configured; an empty array means deliberately cleared. */
 	public static function defaults() {
-		return array( 'quick_search_display' => null );
+		return array( 'quick_search_enabled' => true, 'quick_search_display' => null );
 	}
+
 	/** Honor saved choices; suggest the companion display only before configuration. */
 	public static function selected_display() {
 		$settings = Wpcv_Admin_Settings::get_settings();
@@ -20,15 +22,25 @@ class Wpcv_Admin_Quick_Search {
 		if ( null === $selection ) {
 			return Wpcv_Admin_Quick_Search_Displays::companion_default();
 		}
-		return is_array( $selection ) && isset( $selection['saved_search'], $selection['display'] ) && is_string( $selection['saved_search'] ) && is_string( $selection['display'] )
-			? array( 'saved_search' => $selection['saved_search'], 'display' => $selection['display'] ) : array();
+		if (
+			! is_array( $selection )
+			|| ! isset( $selection['saved_search'], $selection['display'] )
+			|| ! is_string( $selection['saved_search'] )
+			|| ! is_string( $selection['display'] )
+		) {
+			return array();
+		}
+		return array( 'saved_search' => $selection['saved_search'], 'display' => $selection['display'] );
 	}
+
 	/** Give Quick Search its own configuration metabox. */
 	public static function register_settings( $screen_id ) {
 		add_meta_box( 'wpcv-quick-search-settings', __( 'WPCV Quick Search', 'wpcv-admin' ), array( __CLASS__, 'render_settings' ), $screen_id, 'normal', 'default' );
 	}
+
 	/** The native dropdown needs no extra JavaScript or styles. */
 	public static function enqueue_settings() {}
+
 	/** Validate submitted names against currently accessible Contact displays. */
 	public static function validate_settings( $post ) {
 		if ( ! isset( $post['wpcv_quick_search_submitted'] ) ) { return array(); }
@@ -36,12 +48,25 @@ class Wpcv_Admin_Quick_Search {
 		if ( ! is_string( $value ) ) {
 			return new WP_Error( 'quick_search_invalid', __( 'Choose a valid autocomplete display.', 'wpcv-admin' ) );
 		}
-		// An explicit empty choice hides the toolbar search.
+
+		// An empty choice leaves the display unconfigured.
 		if ( '' === $value ) { return array( 'quick_search_display' => array() ); }
 		$selection = json_decode( $value, true );
-		if ( ! is_array( $selection ) || ! isset( $selection['saved_search'], $selection['display'] ) || ! is_string( $selection['saved_search'] ) || ! is_string( $selection['display'] ) || '' === $selection['saved_search'] || '' === $selection['display'] ) {
+		if (
+			! is_array( $selection )
+			|| ! isset( $selection['saved_search'], $selection['display'] )
+			|| ! is_string( $selection['saved_search'] )
+			|| ! is_string( $selection['display'] )
+			|| '' === $selection['saved_search']
+			|| '' === $selection['display']
+		) {
 			return new WP_Error( 'quick_search_invalid', __( 'Choose a valid autocomplete display.', 'wpcv-admin' ) );
 		}
+
+		// Retain an unchanged saved display even if it is temporarily unavailable.
+		$settings = Wpcv_Admin_Settings::get_settings();
+		if ( $selection === $settings['quick_search_display'] ) { return array(); }
+
 		// Recheck access and entity type rather than trusting the submitted option.
 		$displays = Wpcv_Admin_Quick_Search_Displays::get( $selection );
 		if ( is_wp_error( $displays ) ) { return $displays; }
@@ -50,6 +75,7 @@ class Wpcv_Admin_Quick_Search {
 		}
 		return array( 'quick_search_display' => Wpcv_Admin_Quick_Search_Displays::selection( reset( $displays ) ) );
 	}
+
 	/** List eligible displays and retain an unavailable saved choice visibly. */
 	public static function render_settings() {
 		$displays = Wpcv_Admin_Quick_Search_Displays::get();
@@ -73,6 +99,7 @@ class Wpcv_Admin_Quick_Search {
 			if ( is_wp_error( $displays ) || ! $displays ) {
 				return;
 			}
+
 			// CiviCRM supplies Select2, API requests, result formatting and keyboard behavior.
 			Civi::resources()->addCoreResources();
 			self::enqueue_styles();

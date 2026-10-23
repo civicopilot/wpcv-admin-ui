@@ -8,6 +8,7 @@ class Wpcv_Admin_Welcome_Panel_Settings {
 		$names = self::get_selected_afforms();
 		include __DIR__ . '/templates/settings.php';
 	}
+
 	/** Preserve omitted fields and reject invalid reports before saving. */
 	public static function validate( $post ) {
 		if ( ! isset( $post['wpcv_welcome_panel_submitted'] ) ) {
@@ -27,14 +28,17 @@ class Wpcv_Admin_Welcome_Panel_Settings {
 	}
 
 	const MAX_CARDS = 8;
+
 	public static function get_subheading() {
 		$settings = Wpcv_Admin_Settings::get_settings();
 		return is_string( $settings['subheading'] ) ? $settings['subheading'] : '';
 	}
+
 	public static function get_background_color() {
 		$settings = Wpcv_Admin_Settings::get_settings();
 		return is_string( $settings['background_color'] ) ? ( sanitize_hex_color( $settings['background_color'] ) ?: '#151515' ) : '#151515';
 	}
+
 	/** Return unique, nonempty names within the configured limit. */
 	public static function get_selected_afforms() {
 		$settings = Wpcv_Admin_Settings::get_settings();
@@ -56,6 +60,10 @@ class Wpcv_Admin_Welcome_Panel_Settings {
 		if ( count( array_unique( $names ) ) !== count( $names ) ) {
 			return new WP_Error( 'duplicate_afforms', __( 'Select each form only once.', 'wpcv-admin' ) );
 		}
+
+		// Keep saved reports when changing other settings, even if a report is unavailable.
+		if ( array_values( $names ) === self::get_selected_afforms() ) { return array_values( $names ); }
+
 		// Confirm every selected report remains eligible and accessible.
 		$available = Wpcv_Admin_Afforms::get( $names );
 		if ( is_wp_error( $available ) ) {

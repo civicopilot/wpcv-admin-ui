@@ -5,6 +5,7 @@ defined( 'ABSPATH' ) || exit;
 		<fieldset <?php disabled( is_wp_error( $forms ) ); ?>>
 			<p><?php esc_html_e( 'To make a report available below, add its Search Display to a form in CiviCRM Form Builder, give the form a page URL, and enable its Reports listing placement.', 'wpcv-admin' ); ?></p>
 			<p><?php
+
 			/* translators: %d: Maximum number of reports. */
 			echo esc_html( sprintf( __( 'Select up to %d reports, drag them into order, and save.', 'wpcv-admin' ), Wpcv_Admin_Welcome_Panel_Settings::MAX_CARDS ) );
 			?></p>
@@ -15,6 +16,7 @@ defined( 'ABSPATH' ) || exit;
 			<ul id="wpcv-afform-list" data-max-cards="<?php echo esc_attr( Wpcv_Admin_Welcome_Panel_Settings::MAX_CARDS ); ?>">
 				<?php
 				$choices = is_wp_error( $forms ) ? array() : $forms;
+
 				// Show saved selections first, retaining unavailable entries for removal.
 				$ordered = array();
 				foreach ( $names as $name ) {

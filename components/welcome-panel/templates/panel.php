@@ -13,9 +13,11 @@ defined( 'ABSPATH' ) || exit;
 				<?php endif; ?>
 			</div>
 
-			<?php // Keep loading failures distinct from an empty report selection. ?>
 			<div class="welcome-panel-column-container">
-				<?php if ( is_wp_error( $cards ) ) : ?>
+				<?php
+				// Keep loading failures distinct from an empty report selection.
+				if ( is_wp_error( $cards ) ) :
+				?>
 					<div class="welcome-panel-column">
 						<div class="welcome-panel-column-content">
 							<h3><?php esc_html_e( 'Reports temporarily unavailable', 'wpcv-admin' ); ?></h3>
@@ -31,6 +33,7 @@ defined( 'ABSPATH' ) || exit;
 									<?php
 									echo wp_kses(
 										sprintf(
+
 											/* translators: %s: Settings page URL. */
 											__( 'Choose which reports appear here in <a href="%s">WPCV Admin settings</a>.', 'wpcv-admin' ),
 											esc_url( Wpcv_Admin_Settings::get_settings_page_url() )

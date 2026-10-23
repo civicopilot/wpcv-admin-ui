@@ -12,18 +12,22 @@ class Wpcv_Admin_Welcome_Panel {
 		add_action( 'wp_dashboard_setup', array( __CLASS__, 'register_dashboard_widget' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue' ) );
 	}
+
 	/** Provide initial panel values without overwriting saved settings. */
 	public static function defaults() {
-		return array( 'subheading' => __( 'Start with these reports to plan your follow-ups', 'wpcv-admin' ), 'background_color' => '#151515', 'afforms' => array(), 'persist_panel' => true, 'heading' => __( 'Reports', 'wpcv-admin' ) );
+		return array( 'welcome_panel_enabled' => true, 'subheading' => __( 'Start with these reports to plan your follow-ups', 'wpcv-admin' ), 'background_color' => '#151515', 'afforms' => array(), 'persist_panel' => true, 'heading' => __( 'Reports', 'wpcv-admin' ) );
 	}
+
 	/** Keep appearance and report configuration together. */
 	public static function register_settings( $screen_id ) {
 		add_meta_box( 'wpcv-panel-settings', __( 'Welcome Panel', 'wpcv-admin' ), array( 'Wpcv_Admin_Welcome_Panel_Settings', 'render' ), $screen_id, 'normal', 'high' );
 	}
+
 	/** Let the panel settings class validate its own submitted fields. */
 	public static function validate_settings( $post ) {
 		return Wpcv_Admin_Welcome_Panel_Settings::validate( $post );
 	}
+
 	/** Load panel assets only on a dashboard the user can access. */
 	public static function enqueue() {
 		$screen = get_current_screen();
@@ -34,6 +38,7 @@ class Wpcv_Admin_Welcome_Panel {
 		wp_enqueue_script( 'wpcv-welcome-panel', plugin_dir_url( __FILE__ ) . 'assets/welcome-panel.js', array( 'jquery' ), filemtime( __DIR__ . '/assets/welcome-panel.js' ), true );
 		Wpcv_Admin_Afforms::enqueue_icons();
 	}
+
 	/** Load report filtering and ordering assets on the settings screen. */
 	public static function enqueue_settings() {
 		wp_enqueue_style( 'wpcv-report-configuration', plugin_dir_url( __FILE__ ) . 'assets/report-configuration.css', array(), filemtime( __DIR__ . '/assets/report-configuration.css' ) );
@@ -63,6 +68,7 @@ class Wpcv_Admin_Welcome_Panel {
 		$cards            = Wpcv_Admin_Cards::get_cards();
 		$subheading       = Wpcv_Admin_Welcome_Panel_Settings::get_subheading();
 		$background_color = Wpcv_Admin_Welcome_Panel_Settings::get_background_color();
+
 		// The default hex delegates to the CSS variable; other values override it.
 		$background_style = $background_color === Wpcv_Admin_Settings::get_default_settings()['background_color']
 			? ''

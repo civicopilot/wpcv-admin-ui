@@ -1,16 +1,28 @@
 <?php
 /** Load the components and connect them to WordPress. */
 class Wpcv_Admin {
-	/** Map component folders to the classes that own their behavior. */
+	/** Declare each component’s folder, label, class, and enable setting explicitly. */
 	public static function components() {
 		return array(
-			'welcome-panel' => 'Wpcv_Admin_Welcome_Panel',
-			'quick-search' => 'Wpcv_Admin_Quick_Search',
-			'ui-enhancements' => 'Wpcv_Admin_UI_Enhancements',
+			'welcome-panel' => array(
+				'label' => __( 'Welcome Panel', 'wpcv-admin' ),
+				'class' => 'Wpcv_Admin_Welcome_Panel',
+				'enabled_setting' => 'welcome_panel_enabled',
+			),
+			'quick-search' => array(
+				'label' => __( 'Quick Search', 'wpcv-admin' ),
+				'class' => 'Wpcv_Admin_Quick_Search',
+				'enabled_setting' => 'quick_search_enabled',
+			),
+			'ui-enhancements' => array(
+				'label' => __( 'UI Enhancements', 'wpcv-admin' ),
+				'class' => 'Wpcv_Admin_UI_Enhancements',
+				'enabled_setting' => 'ui_enhancements_enabled',
+			),
 		);
 	}
 
-	/** Load every component, then register its hooks and the shared settings page. */
+	/** Keep configuration available; register runtime hooks only for enabled components. */
 	public function run() {
 		require_once __DIR__ . '/class-settings-store.php';
 		require_once dirname( __DIR__ ) . '/admin/class-settings-page.php';
@@ -18,8 +30,19 @@ class Wpcv_Admin {
 			require_once dirname( __DIR__ ) . '/components/' . $directory . '/class-' . $directory . '.php';
 		}
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
+
+		// Menu cache maintenance must also run when UI Enhancements is disabled.
+		Wpcv_Admin_CiviCRM_Menu::register_cache_hooks();
+		$settings = Wpcv_Admin_Settings::get_settings();
 		foreach ( self::components() as $component ) {
-			$component::register_hooks();
+			$enabled_setting = $component['enabled_setting'];
+
+			// If disabled, skip to the next component without registering its hooks.
+			if ( empty( $settings[ $enabled_setting ] ) ) {
+				continue;
+			}
+			$component_class = $component['class'];
+			$component_class::register_hooks();
 		}
 		$page = new Wpcv_Admin_Settings_Page( self::components() );
 		$page->register_hooks();

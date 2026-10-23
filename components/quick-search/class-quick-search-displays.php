@@ -5,6 +5,7 @@ class Wpcv_Admin_Quick_Search_Displays {
 	public static function companion_default() {
 		try {
 			if ( ! civi_wp()->initialize() ) { return array(); }
+
 			// Extension status is configuration metadata; display access is checked below.
 			$extension = \Civi\Api4\Extension::get( false )
 				->addWhere( 'key', '=', 'wpcvquicksearch' )
@@ -18,14 +19,17 @@ class Wpcv_Admin_Quick_Search_Displays {
 			return array();
 		}
 	}
+
 	/** Names identify a display across installations; numeric IDs are site-specific. */
 	public static function selection( $display ) {
 		return array( 'saved_search' => $display['saved_search_id.name'], 'display' => $display['name'] );
 	}
+
 	/** Encode the two names as one native dropdown option value. */
 	public static function key( $selection ) {
 		return wp_json_encode( $selection );
 	}
+
 	/** Return eligible displays, optionally restricted to one saved name pair. */
 	public static function get( $selection = null ) {
 		try {

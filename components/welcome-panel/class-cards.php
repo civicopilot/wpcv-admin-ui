@@ -7,11 +7,13 @@ class Wpcv_Admin_Cards {
 		if ( ! $names ) {
 			return array();
 		}
+
 		// Refresh metadata under the viewing user’s permissions.
 		$forms = Wpcv_Admin_Afforms::get( $names );
 		if ( is_wp_error( $forms ) ) {
 			return $forms;
 		}
+
 		// Build only resolvable destinations, preserving the selected order.
 		$cards = array();
 		foreach ( $names as $name ) {

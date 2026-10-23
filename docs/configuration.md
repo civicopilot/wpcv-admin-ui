@@ -4,6 +4,10 @@ Single site: Open Settings → WPCV Admin
 
 Multisite: Network Admin → Settings → WPCV Admin on multisite.
 
+## Components
+
+Select Welcome Panel, Quick Search, or UI Enhancements, then save. Only enabled components show their configuration metaboxes and run their features. Disabling a component retains its configuration. These switches apply across the network on multisite.
+
 ## Welcome Panel: Reports Configuration
 
 1. In CiviCRM Form Builder:
@@ -103,4 +107,6 @@ Moves from the top level to Administer → Support, preserving its children.
 A CiviCRM quick search appears in the WordPress site admin bar for users with CiviCRM access.
 
 Choose a display in WPCV Quick Search → Autocomplete display and save settings. The optional companion extension [wpcvquicksearch](https://github.com/civicopilot/wpcvquicksearch) supplies a ready-to-use display that can be modified locally;
-when that extension is enabled and no choice has been saved, its accessible display is selected automatically. You can choose another display without that extension, or choose No display selected to omit the admin-bar search.
+when that extension is enabled and no choice has been saved, its accessible display is selected automatically. You can choose another display without that extension, and disable Quick Search in Components to hide it while retaining your selection.
+
+Disabling UI Enhancements also restores the standard CiviCRM menu; its individual choices remain saved.

@@ -2,6 +2,7 @@
 /** Display UI Enhancement controls in WordPress's two-column settings layout. */
 defined( 'ABSPATH' ) || exit;
 $settings = Wpcv_Admin_Settings::get_settings();
+
 // Reflect the shared selection using content types registered on this site.
 $selected = is_array( $settings['activity_post_types'] ) ? $settings['activity_post_types'] : array();
 ?>

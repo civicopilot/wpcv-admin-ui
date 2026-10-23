@@ -3,6 +3,7 @@
 	min-width: 0;
 	overflow-wrap: anywhere;
 }
+
 #dashboard_activity .wpcv-activity-type {
 	display: inline-block;
 	margin-inline-start: 8px;
