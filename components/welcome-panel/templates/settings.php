@@ -11,6 +11,5 @@ defined( 'ABSPATH' ) || exit;
 	<input type="hidden" name="wpcv_welcome_panel_submitted" value="1">
 	<?php include __DIR__ . '/appearance.php'; ?>
 	<h3><?php esc_html_e( 'Reports Configuration', 'wpcv-admin' ); ?></h3>
-	<?php if ( is_multisite() ) : ?><p><?php esc_html_e( 'Report selections are shared across the network and resolved on each site.', 'wpcv-admin' ); ?></p><?php endif; ?>
 	<?php include __DIR__ . '/reports.php'; ?>
 </fieldset>

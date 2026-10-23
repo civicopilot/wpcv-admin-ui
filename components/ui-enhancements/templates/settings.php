@@ -32,7 +32,7 @@ $selected = is_array( $settings['activity_post_types'] ) ? $settings['activity_p
 		<th scope="row"><?php esc_html_e( 'CiviCRM navigation', 'wpcv-admin' ); ?></th>
 		<td>
 			<label><input type="checkbox" name="consolidate_civicrm_menu" value="1" <?php checked( ! empty( $settings['consolidate_civicrm_menu'] ) ); ?>> <?php esc_html_e( 'Consolidate CiviCRM Menu', 'wpcv-admin' ); ?></label>
-			<p class="description"><?php esc_html_e( 'An opinionated menu simplification: remove redundant links, grouped items, and administration menu items moved under Administer.', 'wpcv-admin' ); ?> <a href="<?php echo esc_url( 'https://github.com/civicopilot/wpcv-admin/blob/main/docs/configuration.md#consolidate-civicrm-menu' ); ?>"><?php esc_html_e( 'See menu changes.', 'wpcv-admin' ); ?></a></p>
+			<p class="description"><?php esc_html_e( 'An opinionated menu simplification: remove redundant links, grouped items, and administration menu items moved under Administer.', 'wpcv-admin' ); ?> <a target="_blank" rel="noopener" href="<?php echo esc_url( 'https://github.com/civicopilot/wpcv-admin/blob/main/docs/configuration.md#consolidate-civicrm-menu' ); ?>"><?php esc_html_e( 'See what changes.', 'wpcv-admin' ); ?></a></p>
 		</td>
 	</tr>
 </table>

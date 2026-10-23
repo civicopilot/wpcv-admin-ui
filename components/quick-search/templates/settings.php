@@ -27,6 +27,11 @@ defined( 'ABSPATH' ) || exit;
 		esc_html__( 'Choose a Contact autocomplete display, or install and enable %s for a turn-key search out of the box.', 'wpcv-admin' ),
 		'<a href="' . esc_url( 'https://github.com/civicopilot/wpcvquicksearch' ) . '">WPCV Quick Search</a>'
 	);
+
+	if ( is_multisite() ) {
+		echo ' ';
+		esc_html_e( 'This setting applies to all sites in the network.', 'wpcv-admin' );
+	}
 	?>
 </p>
 <?php if ( ! is_wp_error( $displays ) && ! $displays ) : ?>
@@ -34,7 +39,4 @@ defined( 'ABSPATH' ) || exit;
 <?php endif; ?>
 <?php if ( $unavailable ) : ?>
 	<p><?php esc_html_e( 'The saved display is unavailable on this site. Choose another display or clear the selection before saving.', 'wpcv-admin' ); ?></p>
-<?php endif; ?>
-<?php if ( is_multisite() ) : ?>
-	<p class="description"><?php esc_html_e( 'This setting applies to all sites in the network.', 'wpcv-admin' ); ?></p>
 <?php endif; ?>

@@ -3,7 +3,13 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 		<fieldset <?php disabled( is_wp_error( $forms ) ); ?>>
-			<p><?php esc_html_e( 'To make a report available below, add its Search Display to a form in CiviCRM Form Builder, give the form a page URL, and enable its Reports listing placement.', 'wpcv-admin' ); ?></p>
+			<p>
+			<?php
+			if ( is_multisite() ) {
+				esc_html_e( 'Report selections are shared across the network and resolved on each site.', 'wpcv-admin' );
+				echo ' ';
+			}
+			esc_html_e( 'To make a report available below, add its Search Display to a form in CiviCRM Form Builder, give the form a page URL, and enable its Reports listing placement.', 'wpcv-admin' ); ?></p>
 			<p><?php
 
 			/* translators: %d: Maximum number of reports. */
