@@ -8,7 +8,10 @@ class Wpcv_Admin_UI_Enhancements {
 		Wpcv_Admin_CiviCRM_Menu::register_hooks();
 		add_filter( 'the_posts', array( __CLASS__, 'label_posts' ), 10, 2 );
 		add_filter( 'dashboard_recent_posts_query_args', array( __CLASS__, 'query_args' ) );
-		add_filter( 'eventorganiser_is_event_query', array( __CLASS__, 'activity_is_event_query' ), 10, 2 );
+
+		// Temporary EO workaround: remove this filter activity_is_eo_event_query() below when https://develop.tadpole.cc/plugins/wpcv-event-organiser/-/merge_requests/7 is merged.
+		add_filter( 'eventorganiser_is_event_query', array( __CLASS__, 'activity_is_eo_event_query' ), 10, 2 );
+
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_menu_styles' ) );
 	}
@@ -67,7 +70,7 @@ class Wpcv_Admin_UI_Enhancements {
 
 	/** Apply shared selections to this site’s Activity lists. */
 	public static function query_args( $args ) {
-		// Our custom marker identifies Activity queries for post labels and the Event Organiser bypass.
+		// Marker for Activity labels
 		$args['wpcv_activity'] = true;
 		$settings = Wpcv_Admin_Settings::get_settings();
 		$selected = is_array( $settings['activity_post_types'] ) ? $settings['activity_post_types'] : array();
@@ -89,8 +92,13 @@ class Wpcv_Admin_UI_Enhancements {
 		return $args;
 	}
 
-	/** Activity uses publication dates; skip EO occurrence processing on these mixed content type queries. */
-	public static function activity_is_event_query( $is_event_query, $query ) {
+	/**
+	 * Temporary EO workaround: keep Activity queries based on publication dates.
+	 * Remove activity_is_eo_event_query() and its eventorganiser_is_event_query
+	 * filter registration in register_hooks() once MR !7 is merged to fix mixed post typesquery in activity widget.
+	 * https://develop.tadpole.cc/plugins/wpcv-event-organiser/-/merge_requests/7
+	 */
+	public static function activity_is_eo_event_query( $is_event_query, $query ) {
 		// Queries outside the Activity widget keep Event Organiser’s original behavior.
 		return $query->get( 'wpcv_activity' ) ? false : $is_event_query;
 	}
