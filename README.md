@@ -2,12 +2,12 @@
 
 **Alpha:** under active development; features and settings may change.
 
-Provides a configurable welcome panel with CiviCRM report links, contact quick search in the admin bar, and other UI enhancements.
+Provides contact quick search in the admin bar, a configurable welcome panel with CiviCRM report links, and other UI enhancements.
 
 ## Features
 
-- Customizable welcome panel with up to eight ordered CiviCRM report links.
 - Contact search in the WordPress admin bar using a SearchKit autocomplete display.
+- Customizable welcome panel with up to eight ordered CiviCRM report links.
 - Extends the Activity widget with content-type selection and labels.
 - Cleanup CiviCRM menu
 - Shared network settings on multisite, with reports resolved per site.

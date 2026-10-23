@@ -20,7 +20,7 @@ class Wpcv_Admin_Welcome_Panel {
 
 	/** Keep appearance and report configuration together. */
 	public static function register_settings( $screen_id ) {
-		add_meta_box( 'wpcv-panel-settings', __( 'Welcome Panel', 'wpcv-admin' ), array( 'Wpcv_Admin_Welcome_Panel_Settings', 'render' ), $screen_id, 'normal', 'high' );
+		add_meta_box( 'wpcv-panel-settings', __( 'Welcome Panel', 'wpcv-admin' ), array( 'Wpcv_Admin_Welcome_Panel_Settings', 'render' ), $screen_id, 'normal', 'default' );
 	}
 
 	/** Let the panel settings class validate its own submitted fields. */

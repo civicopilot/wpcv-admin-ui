@@ -4,15 +4,15 @@ class Wpcv_Admin {
 	/** Declare each component’s folder, label, class, and enable setting explicitly. */
 	public static function components() {
 		return array(
-			'welcome-panel' => array(
-				'label' => __( 'Welcome Panel', 'wpcv-admin' ),
-				'class' => 'Wpcv_Admin_Welcome_Panel',
-				'enabled_setting' => 'welcome_panel_enabled',
-			),
 			'quick-search' => array(
 				'label' => __( 'Quick Search', 'wpcv-admin' ),
 				'class' => 'Wpcv_Admin_Quick_Search',
 				'enabled_setting' => 'quick_search_enabled',
+			),
+			'welcome-panel' => array(
+				'label' => __( 'Welcome Panel', 'wpcv-admin' ),
+				'class' => 'Wpcv_Admin_Welcome_Panel',
+				'enabled_setting' => 'welcome_panel_enabled',
 			),
 			'ui-enhancements' => array(
 				'label' => __( 'UI Enhancements', 'wpcv-admin' ),

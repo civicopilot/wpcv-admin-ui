@@ -35,7 +35,7 @@ class Wpcv_Admin_Quick_Search {
 
 	/** Give Quick Search its own configuration metabox. */
 	public static function register_settings( $screen_id ) {
-		add_meta_box( 'wpcv-quick-search-settings', __( 'Quick Search', 'wpcv-admin' ), array( __CLASS__, 'render_settings' ), $screen_id, 'normal', 'default' );
+		add_meta_box( 'wpcv-quick-search-settings', __( 'Quick Search', 'wpcv-admin' ), array( __CLASS__, 'render_settings' ), $screen_id, 'normal', 'high' );
 	}
 
 	/** The native dropdown needs no extra JavaScript or styles. */
