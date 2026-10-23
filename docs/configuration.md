@@ -106,7 +106,7 @@ Moves from the top level to Administer → Support, preserving its children.
 
 A CiviCRM quick search appears in the WordPress site admin bar for users with CiviCRM access.
 
-Choose a display in WPCV Quick Search → Autocomplete display and save settings. The optional companion extension [wpcvquicksearch](https://github.com/civicopilot/wpcvquicksearch) supplies a ready-to-use display that can be modified locally;
+Choose a display in Quick Search → Quick Search Autocomplete and save settings. The optional companion extension [wpcvquicksearch](https://github.com/civicopilot/wpcvquicksearch) supplies a ready-to-use display that can be modified locally;
 when that extension is enabled and no choice has been saved, its accessible display is selected automatically. You can choose another display without that extension, and disable Quick Search in Components to hide it while retaining your selection.
 
 Disabling UI Enhancements also restores the standard CiviCRM menu; its individual choices remain saved.

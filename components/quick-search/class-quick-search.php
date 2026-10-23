@@ -35,7 +35,7 @@ class Wpcv_Admin_Quick_Search {
 
 	/** Give Quick Search its own configuration metabox. */
 	public static function register_settings( $screen_id ) {
-		add_meta_box( 'wpcv-quick-search-settings', __( 'WPCV Quick Search', 'wpcv-admin' ), array( __CLASS__, 'render_settings' ), $screen_id, 'normal', 'default' );
+		add_meta_box( 'wpcv-quick-search-settings', __( 'Quick Search', 'wpcv-admin' ), array( __CLASS__, 'render_settings' ), $screen_id, 'normal', 'default' );
 	}
 
 	/** The native dropdown needs no extra JavaScript or styles. */
@@ -68,20 +68,20 @@ class Wpcv_Admin_Quick_Search {
 		if ( $selection === $settings['quick_search_display'] ) { return array(); }
 
 		// Recheck access and entity type rather than trusting the submitted option.
-		$displays = Wpcv_Admin_Quick_Search_Displays::get( $selection );
-		if ( is_wp_error( $displays ) ) { return $displays; }
-		if ( ! $displays ) {
+		$autocomplete_displays = Wpcv_Admin_Quick_Search_Displays::get( $selection );
+		if ( is_wp_error( $autocomplete_displays ) ) { return $autocomplete_displays; }
+		if ( ! $autocomplete_displays ) {
 			return new WP_Error( 'quick_search_missing', __( 'The selected Contact autocomplete display is unavailable or inaccessible.', 'wpcv-admin' ) );
 		}
-		return array( 'quick_search_display' => Wpcv_Admin_Quick_Search_Displays::selection( reset( $displays ) ) );
+		return array( 'quick_search_display' => Wpcv_Admin_Quick_Search_Displays::selection( reset( $autocomplete_displays ) ) );
 	}
 
 	/** List eligible displays and retain an unavailable saved choice visibly. */
 	public static function render_settings() {
-		$displays = Wpcv_Admin_Quick_Search_Displays::get();
+		$autocomplete_displays = Wpcv_Admin_Quick_Search_Displays::get();
 		$selection = self::selected_display();
-		$selected_key = $selection ? Wpcv_Admin_Quick_Search_Displays::key( $selection ) : '';
-		$unavailable = $selected_key && ! is_wp_error( $displays ) && ! isset( $displays[ $selected_key ] );
+		$selected_display_key = $selection ? Wpcv_Admin_Quick_Search_Displays::key( $selection ) : '';
+		$unavailable = $selected_display_key && ! is_wp_error( $autocomplete_displays ) && ! isset( $autocomplete_displays[ $selected_display_key ] );
 		include __DIR__ . '/templates/settings.php';
 	}
 
@@ -95,8 +95,8 @@ class Wpcv_Admin_Quick_Search {
 		try {
 			$selection = self::selected_display();
 			if ( ! $selection ) { return; }
-			$displays = Wpcv_Admin_Quick_Search_Displays::get( $selection );
-			if ( is_wp_error( $displays ) || ! $displays ) {
+			$autocomplete_displays = Wpcv_Admin_Quick_Search_Displays::get( $selection );
+			if ( is_wp_error( $autocomplete_displays ) || ! $autocomplete_displays ) {
 				return;
 			}
 
