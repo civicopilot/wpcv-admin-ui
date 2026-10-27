@@ -1,10 +1,16 @@
 /* Style report choices and drag feedback on the settings page. */
-#wpcv-afform-list { margin-left: 0; list-style: none; }
-.wpcv-afform-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; background: #eee; padding: 12px; }
-.wpcv-afform-title { flex: 1; }
-.wpcv-afform-row input { margin-right: 8px; }
-.wpcv-afform-handle { cursor: grab; color: #646970; }
-.wpcv-afform-placeholder { border: 1px dashed #2271b1; min-height: 50px; }
+#wpcv-admin-ui-afform-list { margin-left: 0; list-style: none; }
 
-.wpcv-afform-row[hidden] { display: none; }
-#wpcv-afform-search-status:empty { display: none; }
+.wpcv-admin-ui-afform-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; background: #eee; padding: 12px; }
+
+.wpcv-admin-ui-afform-title { flex: 1; }
+
+.wpcv-admin-ui-afform-row input { margin-right: 8px; }
+
+.wpcv-admin-ui-afform-handle { cursor: grab; color: #646970; }
+
+.wpcv-admin-ui-afform-placeholder { border: 1px dashed #2271b1; min-height: 50px; }
+
+.wpcv-admin-ui-afform-row[hidden] { display: none; }
+
+#wpcv-admin-ui-afform-search-status:empty { display: none; }

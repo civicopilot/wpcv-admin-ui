@@ -1,9 +1,10 @@
 /* Style content-type labels in the Activity widget. */
-#dashboard_activity .wpcv-activity-title {
+#dashboard_activity .wpcv-admin-ui-activity-title {
 	min-width: 0;
 	overflow-wrap: anywhere;
 }
-#dashboard_activity .wpcv-activity-type {
+
+#dashboard_activity .wpcv-admin-ui-activity-type {
 	display: inline-block;
 	margin-inline-start: 8px;
 	white-space: nowrap;

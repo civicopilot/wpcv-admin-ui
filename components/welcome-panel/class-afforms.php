@@ -1,14 +1,14 @@
 <?php
 /** Find accessible CiviCRM reports and build their links. */
-class Wpcv_Admin_Afforms {
+class WPCV_Admin_UI_Afforms {
 	/** Bootstrap CiviCRM before using its API or resources. */
 	public static function initialize() {
 		try {
 			if ( ! civi_wp()->initialize() || ! class_exists( '\Civi\Api4\Afform' ) ) {
-				return new WP_Error( 'afform_unavailable', __( 'CiviCRM Form Builder is unavailable.', 'wpcv-admin' ) );
+				return new WP_Error( 'afform_unavailable', __( 'CiviCRM Form Builder is unavailable.', 'wpcv-admin-ui' ) );
 			}
 		} catch ( \Throwable $e ) {
-			return new WP_Error( 'afform_unavailable', __( 'CiviCRM Form Builder could not be initialized.', 'wpcv-admin' ) );
+			return new WP_Error( 'afform_unavailable', __( 'CiviCRM Form Builder could not be initialized.', 'wpcv-admin-ui' ) );
 		}
 		return true;
 	}
@@ -28,6 +28,7 @@ class Wpcv_Admin_Afforms {
 				->addWhere( 'server_route', 'IS NOT EMPTY' )
 				->addOrderBy( 'title', 'ASC' )
 				->setLimit( 0 );
+
 			// Restrict dashboard and validation queries to the selected names.
 			if ( null !== $names ) {
 				if ( empty( $names ) ) {
@@ -35,6 +36,7 @@ class Wpcv_Admin_Afforms {
 				}
 				$query->addWhere( 'name', 'IN', $names );
 			}
+
 			// Index results by name so callers can restore the saved order.
 			$forms = array();
 			foreach ( $query->execute() as $form ) {
@@ -42,7 +44,7 @@ class Wpcv_Admin_Afforms {
 			}
 			return $forms;
 		} catch ( \Throwable $e ) {
-			return new WP_Error( 'afform_query_failed', __( 'Unable to retrieve CiviCRM forms. Please try again.', 'wpcv-admin' ) );
+			return new WP_Error( 'afform_query_failed', __( 'Unable to retrieve CiviCRM forms. Please try again.', 'wpcv-admin-ui' ) );
 		}
 	}
 
@@ -65,7 +67,7 @@ class Wpcv_Admin_Afforms {
 		$files = array( 'css/crm-i.css', 'bower_components/font-awesome/css/all.min.css', 'bower_components/font-awesome/css/v4-font-face.min.css', 'css/crm-i-v4-shims.css' );
 		$previous = array();
 		foreach ( $files as $index => $file ) {
-			$handle = 'wpcv-afform-icons-' . $index;
+			$handle = 'wpcv-admin-ui-afform-icons-' . $index;
 			wp_enqueue_style( $handle, CRM_Core_Resources::singleton()->getUrl( 'civicrm', $file, true ), $previous, null );
 			$previous = array( $handle );
 		}

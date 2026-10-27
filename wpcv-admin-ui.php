@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Declare the plugin and start WPCV Admin.
+ * Declare the plugin and start WPCV Admin UI.
  *
  * @link              https://civicopilot.com
  * @since             0.1
- * @package           Wpcv_Admin
+ * @package           WPCV_Admin_UI
  *
  * @wordpress-plugin
- * Plugin Name:       WPCV Admin Enhancements
- * Plugin URI:        https://github.com/civicopilot/wpcv-admin
+ * Plugin Name:       WPCV Admin UI
+ * Plugin URI:        https://github.com/civicopilot/wpcv-admin-ui
  * Description:       Adds a configurable CiviCRM report welcome panel, quick search, and dashboard enhancements to WordPress
  * Version:           0.1
  * Requires Plugins:  civicrm
@@ -17,7 +17,7 @@
  * Author URI:        https://civicopilot.com/
  * License:           GPL-3.0-only
  * License URI:       https://www.gnu.org/licenses/gpl-3.0.txt
- * Text Domain:       wpcv-admin
+ * Text Domain:       wpcv-admin-ui
  * Domain Path:       /languages
  */
 
@@ -29,16 +29,16 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Plugin asset and release version.
  */
-define( 'WPCV_ADMIN_VERSION', '0.1' );
+define( 'WPCV_ADMIN_UI_VERSION', '0.1' );
 
 /** Load the component coordinator. */
-require plugin_dir_path( __FILE__ ) . 'includes/class-wpcv-admin.php';
+require plugin_dir_path( __FILE__ ) . 'includes/class-wpcv-admin-ui.php';
 
 /** Start the components and settings page. */
-function run_wpcv_admin() {
+function run_wpcv_admin_ui() {
 
-	$plugin = new Wpcv_Admin();
+	$plugin = new WPCV_Admin_UI();
 	$plugin->run();
 
 }
-run_wpcv_admin();
+run_wpcv_admin_ui();

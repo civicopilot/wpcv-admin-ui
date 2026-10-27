@@ -2,12 +2,14 @@
 (function ($) {
 	'use strict';
 	$(function () {
-		var list = document.getElementById('wpcv-afform-list');
+		var list = document.getElementById('wpcv-admin-ui-afform-list');
 		if (!list) return;
 		var max = Number(list.dataset.maxCards);
-		var search = document.getElementById('wpcv-afform-search');
-		var status = document.getElementById('wpcv-afform-search-status');
+		var search = document.getElementById('wpcv-admin-ui-afform-search');
+		var status = document.getElementById('wpcv-admin-ui-afform-search-status');
+
 		// Filter locally and enforce the selection limit without clearing checked inputs.
+
 		function refresh() {
 			var term = search ? search.value.trim().toLocaleLowerCase() : '';
 			var checked = list.querySelectorAll('input:checked').length;
@@ -17,6 +19,7 @@
 				var match = (row.dataset.search || row.textContent).toLocaleLowerCase().includes(term);
 				if (match) matches++;
 				checkbox.disabled = !checkbox.checked && checked >= max;
+
 				// Hidden checked inputs still submit in their saved order.
 				row.hidden = !match;
 			});
@@ -31,11 +34,12 @@
 		}
 		$(list).on('change', 'input', refresh);
 		refresh();
+
 		// Drag changes DOM order, which is also the order submitted on save.
 		if ($.fn.sortable) {
 			$(list).sortable({
 				items: '> li:not([hidden])',
-				handle: '.wpcv-afform-handle', axis: 'y', placeholder: 'wpcv-afform-placeholder'
+				handle: '.wpcv-admin-ui-afform-handle', axis: 'y', placeholder: 'wpcv-admin-ui-afform-placeholder'
 			});
 		}
 	});

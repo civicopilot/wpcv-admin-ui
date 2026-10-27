@@ -1,8 +1,19 @@
 # Configuration
 
-Single site: Open Settings → WPCV Admin
+Single site: Open Settings → WPCV Admin UI
 
-Multisite: Network Admin → Settings → WPCV Admin on multisite.
+Multisite: Network Admin → Settings → WPCV Admin UI on multisite.
+
+## Components
+
+Select Quick Search, Welcome Panel, or UI Enhancements, then save. Only enabled components show their configuration metaboxes and run their features. Disabling a component retains its configuration. These switches apply across the network on multisite.
+
+## CiviCRM Quick Search
+
+A CiviCRM quick search appears in the WordPress site admin bar for users with CiviCRM access.
+
+Choose a display in Quick Search → Quick Search Autocomplete and save settings. The optional companion extension [wpcvquicksearch](https://github.com/civicopilot/wpcvquicksearch) supplies a ready-to-use display that can be modified locally;
+when that extension is enabled and no choice has been saved, its accessible display is selected automatically. You can choose another display without that extension, and disable Quick Search in Components to hide it while retaining your selection.
 
 ## Welcome Panel: Reports Configuration
 
@@ -25,6 +36,8 @@ Users see reports they can access. On multisite, selections are shared across th
 - **Keep welcome panel visible:** enabled by default. Turn it off to let users hide or restore the panel through Screen Options.
 
 ## UI Enhancements
+
+Disabling UI Enhancements also restores the standard CiviCRM menu; its individual choices remain saved.
 
 - **Activity widget content:** choose content types for recently published and scheduled items and shows the content type badge.
 - **Remove CiviCRM Icon menu item:** hides the CiviCRM logo and submenu, which you may not need with CAU’s command palette integration enabled. Log Out and View My Contact are already in the account menu at the top right of the WordPress admin bar for Wordpress/CiviCRM installs.
@@ -97,10 +110,3 @@ Hides New Campaign and New Petition.
 ### Support
 
 Moves from the top level to Administer → Support, preserving its children.
-
-## CiviCRM Quick Search
-
-A CiviCRM quick search appears in the WordPress site admin bar for users with CiviCRM access.
-
-Choose a display in WPCV Quick Search → Autocomplete display and save settings. The optional companion extension [wpcvquicksearch](https://github.com/civicopilot/wpcvquicksearch) supplies a ready-to-use display that can be modified locally;
-when that extension is enabled and no choice has been saved, its accessible display is selected automatically. You can choose another display without that extension, or choose No display selected to omit the admin-bar search.
