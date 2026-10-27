@@ -30,7 +30,7 @@ if ( '' === $selected_display_key && ! is_wp_error( $autocomplete_displays ) ) :
 
 		/* translators: %s: Link to the companion CiviCRM extension. */
 		esc_html__( 'Choose a Contact autocomplete display, or install and enable %s for a turn-key search out of the box.', 'wpcv-admin' ),
-		'<a href="' . esc_url( 'https://github.com/civicopilot/wpcvquicksearch' ) . '">WPCV Quick Search</a>'
+		'<a target="_blank" rel="noopener" href="' . esc_url( 'https://github.com/civicopilot/wpcvquicksearch' ) . '">WPCV Quick Search</a>'
 	);
 
 	if ( is_multisite() ) {

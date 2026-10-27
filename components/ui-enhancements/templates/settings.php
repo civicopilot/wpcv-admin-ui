@@ -25,7 +25,7 @@ $selected = is_array( $settings['activity_post_types'] ) ? $settings['activity_p
 		<td>
 			<input type="checkbox" id="wpcv-remove-civicrm-icon-menu" name="remove_civicrm_icon_menu" value="1" <?php checked( ! empty( $settings['remove_civicrm_icon_menu'] ) ); ?>>
 			<label for="wpcv-remove-civicrm-icon-menu"><?php esc_html_e( 'Remove CiviCRM Icon menu item', 'wpcv-admin' ); ?></label>
-			<p class="description"><?php esc_html_e( 'You may not need this menu when CAU’s command palette integration is enabled. Additionally, Log Out and View My Contact are already available in the account menu at the top right of the WordPress admin bar.', 'wpcv-admin' ); ?></p>
+			<p class="description"><?php esc_html_e( 'You may not need this menu when CAU’s command palette integration is enabled. Additionally, access to your CiviCRM Profile and Log Out links are already available in the account menu at the top right of the WordPress admin bar.', 'wpcv-admin' ); ?></p>
 		</td>
 	</tr>
 	<tr>

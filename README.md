@@ -1,8 +1,8 @@
 # WPCV Admin Enhancements
 
-**Alpha:** under active development; features and settings may change.
+Provides a contact quick search in the admin bar, a configurable welcome panel with CiviCRM report links, and other UI enhancements.
 
-Provides contact quick search in the admin bar, a configurable welcome panel with CiviCRM report links, and other UI enhancements.
+**Alpha:** experimental plugin under active development; features and settings may change most notably the welcome panel.
 
 ## Features
 
@@ -25,6 +25,9 @@ Possible next steps, not yet implemented:
 - **Component-based summaries:** offer useful starting points for contributions, memberships and upcoming events, shown only for enabled components and chosen by administrators. Allow custom Search Displays to replace those defaults.
 - **From insight to action:** link summaries to supporting reports, such as memberships expiring soon or upcoming event registrations.
 
+
 ## Developers
+
+It may make sense to port changes from this experimental plugin into the [CiviCRM WordPress plugin](https://lab.civicrm.org/dev/wordpress) or [CiviCRM Admin Utilities](https://github.com/christianwach/civicrm-admin-utilities) after a feature is stable and widely liked.
 
 For code layout and implementation details, see the [developer guide](docs/developers.md).
