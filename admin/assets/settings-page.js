@@ -3,7 +3,7 @@
 	'use strict';
 	$(function () {
 		// Enable native settings metabox controls.
-		var boxes = document.querySelector('[data-wpcv-screen]');
-		if (boxes && window.postboxes) window.postboxes.add_postbox_toggles(boxes.dataset.wpcvScreen);
+		var boxes = document.querySelector('[data-wpcv-admin-ui-settings-screen]');
+		if (boxes && window.postboxes) window.postboxes.add_postbox_toggles(boxes.dataset.wpcvAdminUiSettingsScreen);
 	});
 })(jQuery);

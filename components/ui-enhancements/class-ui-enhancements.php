@@ -1,11 +1,11 @@
 <?php
 /** Configure dashboard Activity and optional admin UI simplifications. */
 require_once __DIR__ . '/class-civicrm-menu.php';
-class Wpcv_Admin_UI_Enhancements {
+class WPCV_Admin_UI_Enhancements {
 
 	/** Connect Activity queries, result labels, and dashboard assets. */
 	public static function register_hooks() {
-		Wpcv_Admin_CiviCRM_Menu::register_hooks();
+		WPCV_Admin_UI_CiviCRM_Menu::register_hooks();
 		add_filter( 'the_posts', array( __CLASS__, 'label_posts' ), 10, 2 );
 		add_filter( 'dashboard_recent_posts_query_args', array( __CLASS__, 'query_args' ) );
 
@@ -21,7 +21,7 @@ class Wpcv_Admin_UI_Enhancements {
 
 	/** Add the UI Enhancements configuration metabox. */
 	public static function register_settings( $screen_id ) {
-		add_meta_box( 'wpcv-dashboard-enhancements', __( 'UI Enhancements', 'wpcv-admin' ), array( __CLASS__, 'render_settings' ), $screen_id, 'normal', 'default' );
+		add_meta_box( 'wpcv-admin-ui-ui-enhancements-settings', __( 'UI Enhancements', 'wpcv-admin-ui' ), array( __CLASS__, 'render_settings' ), $screen_id, 'normal', 'default' );
 	}
 
 	/** Display the available content types and saved choices. */
@@ -32,7 +32,7 @@ class Wpcv_Admin_UI_Enhancements {
 
 	/** Preserve omitted settings and accept only available content types. */
 	public static function validate_settings( $post ) {
-		if ( ! isset( $post['wpcv_ui_enhancements_submitted'] ) ) { return array(); }
+		if ( ! isset( $post['wpcv_admin_ui_ui_enhancements_submitted'] ) ) { return array(); }
 		$types = isset( $post['activity_post_types'] ) && is_array( $post['activity_post_types'] ) ? $post['activity_post_types'] : array();
 		return array(
 			'activity_post_types' => array_values( array_intersect( array_keys( self::post_types() ), array_filter( $types, 'is_string' ) ) ),
@@ -43,10 +43,10 @@ class Wpcv_Admin_UI_Enhancements {
 
 	/** Hide the logo menu before paint only when the checkbox is enabled. */
 	public static function enqueue_menu_styles() {
-		$settings = Wpcv_Admin_Settings::get_settings();
+		$settings = WPCV_Admin_UI_Settings::get_settings();
 		if ( empty( $settings['remove_civicrm_icon_menu'] ) ) { return; }
 		wp_enqueue_style(
-			'wpcv-civicrm-menu',
+			'wpcv-admin-ui-civicrm-menu',
 			plugin_dir_url( __FILE__ ) . 'assets/civicrm-menu.css',
 			array(),
 			filemtime( __DIR__ . '/assets/civicrm-menu.css' )
@@ -57,8 +57,8 @@ class Wpcv_Admin_UI_Enhancements {
 	public static function enqueue() {
 		$screen = get_current_screen();
 		if ( ! $screen || ! is_blog_admin() || 'dashboard' !== $screen->id ) { return; }
-		wp_enqueue_style( 'wpcv-dashboard-activity', plugin_dir_url( __FILE__ ) . 'assets/dashboard-activity.css', array(), filemtime( __DIR__ . '/assets/dashboard-activity.css' ) );
-		wp_enqueue_script( 'wpcv-dashboard-activity', plugin_dir_url( __FILE__ ) . 'assets/dashboard-activity.js', array( 'jquery' ), filemtime( __DIR__ . '/assets/dashboard-activity.js' ), true );
+		wp_enqueue_style( 'wpcv-admin-ui-dashboard-activity', plugin_dir_url( __FILE__ ) . 'assets/dashboard-activity.css', array(), filemtime( __DIR__ . '/assets/dashboard-activity.css' ) );
+		wp_enqueue_script( 'wpcv-admin-ui-dashboard-activity', plugin_dir_url( __FILE__ ) . 'assets/dashboard-activity.js', array( 'jquery' ), filemtime( __DIR__ . '/assets/dashboard-activity.js' ), true );
 	}
 
 	/** Offer public content types with an editor, excluding media. */
@@ -71,8 +71,8 @@ class Wpcv_Admin_UI_Enhancements {
 	/** Apply shared selections to this site’s Activity lists. */
 	public static function query_args( $args ) {
 		// Marker for Activity labels
-		$args['wpcv_activity'] = true;
-		$settings = Wpcv_Admin_Settings::get_settings();
+		$args['wpcv_admin_ui_activity'] = true;
+		$settings = WPCV_Admin_UI_Settings::get_settings();
 		$selected = is_array( $settings['activity_post_types'] ) ? $settings['activity_post_types'] : array();
 		$available = self::post_types();
 		$types = array();
@@ -100,12 +100,12 @@ class Wpcv_Admin_UI_Enhancements {
 	 */
 	public static function activity_is_eo_event_query( $is_event_query, $query ) {
 		// Queries outside the Activity widget keep Event Organiser’s original behavior.
-		return $query->get( 'wpcv_activity' ) ? false : $is_event_query;
+		return $query->get( 'wpcv_admin_ui_activity' ) ? false : $is_event_query;
 	}
 
 	/** Pass labels for this widget's results to the dashboard script. */
 	public static function label_posts( $posts, $query ) {
-		if ( ! $query->get( 'wpcv_activity' ) ) {
+		if ( ! $query->get( 'wpcv_admin_ui_activity' ) ) {
 			return $posts;
 		}
 		$labels = array();
@@ -122,8 +122,8 @@ class Wpcv_Admin_UI_Enhancements {
 
 		// Pass labels to the footer script without another database query.
 		wp_add_inline_script(
-			'wpcv-dashboard-activity',
-			'window.wpcvActivityLabels = Object.assign(window.wpcvActivityLabels || {}, ' . wp_json_encode( $labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ) . ');',
+			'wpcv-admin-ui-dashboard-activity',
+			'window.wpcvAdminUIActivityLabels = Object.assign(window.wpcvAdminUIActivityLabels || {}, ' . wp_json_encode( $labels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ) . ');',
 			'before'
 		);
 		return $posts;

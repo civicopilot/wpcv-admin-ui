@@ -2,11 +2,11 @@
 (function ($) {
 	'use strict';
 	$(function () {
-		var list = document.getElementById('wpcv-afform-list');
+		var list = document.getElementById('wpcv-admin-ui-afform-list');
 		if (!list) return;
 		var max = Number(list.dataset.maxCards);
-		var search = document.getElementById('wpcv-afform-search');
-		var status = document.getElementById('wpcv-afform-search-status');
+		var search = document.getElementById('wpcv-admin-ui-afform-search');
+		var status = document.getElementById('wpcv-admin-ui-afform-search-status');
 
 		// Filter locally and enforce the selection limit without clearing checked inputs.
 
@@ -39,7 +39,7 @@
 		if ($.fn.sortable) {
 			$(list).sortable({
 				items: '> li:not([hidden])',
-				handle: '.wpcv-afform-handle', axis: 'y', placeholder: 'wpcv-afform-placeholder'
+				handle: '.wpcv-admin-ui-afform-handle', axis: 'y', placeholder: 'wpcv-admin-ui-afform-placeholder'
 			});
 		}
 	});

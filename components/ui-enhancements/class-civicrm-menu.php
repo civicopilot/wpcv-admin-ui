@@ -1,6 +1,6 @@
 <?php
 /** Consolidate CiviCRM navigation without changing stored menu records. */
-class Wpcv_Admin_CiviCRM_Menu {
+class WPCV_Admin_UI_CiviCRM_Menu {
 	public static function register_hooks() {
 		add_action( 'civicrm_config', array( __CLASS__, 'register_navigation' ) );
 	}
@@ -21,7 +21,7 @@ class Wpcv_Admin_CiviCRM_Menu {
 	}
 
 	public static function navigation( $event ) {
-		$settings = Wpcv_Admin_Settings::get_settings();
+		$settings = WPCV_Admin_UI_Settings::get_settings();
 		if ( ( empty( $settings['ui_enhancements_enabled'] ) || empty( $settings['consolidate_civicrm_menu'] ) ) ) { return; }
 		self::consolidate( $event->params );
 		self::hide_menu_items( $event->params );
@@ -136,8 +136,8 @@ class Wpcv_Admin_CiviCRM_Menu {
 					$item['child'][$id]['attributes']['active'] = 0;
 				}
 			}
-			self::group_children( $item, 'wpcv_ab_testing', __( 'A/B Testing', 'wpcv-admin' ), array( 'New A/B Test', 'Manage A/B Tests' ), 100 );
-			self::group_children( $item, 'wpcv_sms', __( 'SMS', 'wpcv-admin' ), array( 'New SMS', 'Find Mass SMS' ), 101 );
+			self::group_children( $item, 'wpcv_admin_ui_ab_testing', __( 'A/B Testing', 'wpcv-admin-ui' ), array( 'New A/B Test', 'Manage A/B Tests' ), 100 );
+			self::group_children( $item, 'wpcv_admin_ui_sms', __( 'SMS', 'wpcv-admin-ui' ), array( 'New SMS', 'Find Mass SMS' ), 101 );
 		}
 	}
 
@@ -145,21 +145,21 @@ class Wpcv_Admin_CiviCRM_Menu {
 	public static function group_surveys( &$menu ) {
 		foreach ( $menu as &$item ) {
 			if ( 'Campaigns' !== ( $item['attributes']['name'] ?? '' ) ) { continue; }
-			self::group_children( $item, 'wpcv_surveys', __( 'Surveys', 'wpcv-admin' ), array( 'New Survey', 'Conduct Survey', 'Reserve Respondents', 'Interview Respondents', 'Release Respondents' ), 2 );
+			self::group_children( $item, 'wpcv_admin_ui_surveys', __( 'Surveys', 'wpcv-admin-ui' ), array( 'New Survey', 'Conduct Survey', 'Reserve Respondents', 'Interview Respondents', 'Release Respondents' ), 2 );
 
 			// Place the dashboard first and Surveys second, ahead of the remaining entries.
 			$dashboards = array( 'afsearchCampaignDashboard', 'Dashboard', 'Campaign Dashboard' );
 			$weight = 0;
 			foreach ( $item['child'] ?? array() as $child ) {
 				$name = $child['attributes']['name'] ?? '';
-				if ( 'wpcv_surveys' !== $name && ! in_array( $name, $dashboards, true ) ) {
+				if ( 'wpcv_admin_ui_surveys' !== $name && ! in_array( $name, $dashboards, true ) ) {
 					$weight = min( $weight, (int) ( $child['attributes']['weight'] ?? 0 ) );
 				}
 			}
 			foreach ( $item['child'] ?? array() as $id => $child ) {
 				$name = $child['attributes']['name'] ?? '';
 				if ( in_array( $name, $dashboards, true ) ) { $item['child'][$id]['attributes']['weight'] = $weight - 2; }
-				if ( 'wpcv_surveys' === $name ) { $item['child'][$id]['attributes']['weight'] = $weight - 1; }
+				if ( 'wpcv_admin_ui_surveys' === $name ) { $item['child'][$id]['attributes']['weight'] = $weight - 1; }
 			}
 		}
 	}
@@ -168,8 +168,8 @@ class Wpcv_Admin_CiviCRM_Menu {
 	public static function group_contacts( &$menu ) {
 		foreach ( $menu as &$item ) {
 			if ( 'Contacts' !== ( $item['attributes']['name'] ?? '' ) ) { continue; }
-			self::group_children( $item, 'wpcv_new_contact', __( 'New Contact', 'wpcv-admin' ), array( 'New Individual', 'New Household', 'New Organization' ) );
-			self::group_children( $item, 'wpcv_contact_import', __( 'Import Data', 'wpcv-admin' ), array( 'Import Contacts', 'Import Activities', 'Import MultiValued Custom' ) );
+			self::group_children( $item, 'wpcv_admin_ui_new_contact', __( 'New Contact', 'wpcv-admin-ui' ), array( 'New Individual', 'New Household', 'New Organization' ) );
+			self::group_children( $item, 'wpcv_admin_ui_contact_import', __( 'Import Data', 'wpcv-admin-ui' ), array( 'Import Contacts', 'Import Activities', 'Import MultiValued Custom' ) );
 		}
 	}
 
@@ -220,19 +220,19 @@ class Wpcv_Admin_CiviCRM_Menu {
 
 	/** Each CiviCRM cache notices network changes on its next initialization. */
 	public static function refresh_cache() {
-		$settings = Wpcv_Admin_Settings::get_settings();
+		$settings = WPCV_Admin_UI_Settings::get_settings();
 
 		// Also invalidate cached menus when the consolidation rules change.
 		$state = ( empty( $settings['ui_enhancements_enabled'] ) || empty( $settings['consolidate_civicrm_menu'] ) ) ? 'off' : 'on:' . filemtime( __FILE__ ) . ':' . (int) self::has_sms_provider();
 		$cache = Civi::cache( 'navigation' );
-		if ( $cache->get( 'wpcv_admin_menu_state' ) === $state ) { return; }
+		if ( $cache->get( 'wpcv_admin_ui_menu_state' ) === $state ) { return; }
 		CRM_Core_BAO_Navigation::flushCache();
-		$cache->set( 'wpcv_admin_menu_state', $state );
+		$cache->set( 'wpcv_admin_ui_menu_state', $state );
 	}
 
 	/** Refresh the current site's menu immediately after settings are saved. */
 	public static function settings_saved( $option ) {
-		if ( Wpcv_Admin_Settings::get_option_name() !== $option ) { return; }
+		if ( WPCV_Admin_UI_Settings::get_option_name() !== $option ) { return; }
 		if ( civi_wp()->initialize() ) { self::refresh_cache(); }
 	}
 }

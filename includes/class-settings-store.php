@@ -1,6 +1,6 @@
 <?php
 /** Read and save shared site or network settings. */
-class Wpcv_Admin_Settings {
+class WPCV_Admin_UI_Settings {
 
 	// Network settings are managed centrally; single-site settings locally.
 
@@ -13,17 +13,17 @@ class Wpcv_Admin_Settings {
 	}
 
 	public static function get_settings_page_url() {
-		return is_multisite() ? network_admin_url( 'settings.php?page=wpcv-admin' ) : admin_url( 'options-general.php?page=wpcv-admin' );
+		return is_multisite() ? network_admin_url( 'settings.php?page=wpcv-admin-ui' ) : admin_url( 'options-general.php?page=wpcv-admin-ui' );
 	}
 
 	public static function get_option_name() {
-		return is_multisite() ? 'wpcv_admin_network' : 'wpcv_admin';
+		return is_multisite() ? 'wpcv_admin_ui_network' : 'wpcv_admin_ui';
 	}
 
 	/** Merge defaults declared by the registered components. */
 	public static function get_default_settings() {
 		$defaults = array();
-		foreach ( Wpcv_Admin::components() as $component ) {
+		foreach ( WPCV_Admin_UI::components() as $component ) {
 			$component_class = $component['class'];
 			$defaults = array_merge( $defaults, $component_class::defaults() );
 		}

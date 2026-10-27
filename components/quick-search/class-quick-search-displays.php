@@ -1,6 +1,6 @@
 <?php
 /** Find Contact autocomplete displays that the current user can access. */
-class Wpcv_Admin_Quick_Search_Displays {
+class WPCV_Admin_UI_Quick_Search_Displays {
 	/** Suggest the companion display only when its extension is enabled and accessible. */
 	public static function companion_default() {
 		try {
@@ -34,10 +34,10 @@ class Wpcv_Admin_Quick_Search_Displays {
 	public static function get( $selection = null ) {
 		try {
 			if ( ! civi_wp()->initialize() ) {
-				return new WP_Error( 'quick_search_unavailable', __( 'CiviCRM contact search is unavailable.', 'wpcv-admin' ) );
+				return new WP_Error( 'quick_search_unavailable', __( 'CiviCRM contact search is unavailable.', 'wpcv-admin-ui' ) );
 			}
 			if ( ! CRM_Core_Permission::check( 'access CiviCRM' ) ) {
-				return new WP_Error( 'quick_search_access', __( 'CiviCRM access is required to use Quick Search.', 'wpcv-admin' ) );
+				return new WP_Error( 'quick_search_access', __( 'CiviCRM access is required to use Quick Search.', 'wpcv-admin-ui' ) );
 			}
 			$query = \Civi\Api4\SearchDisplay::get( true )
 				->addSelect( 'name', 'label', 'saved_search_id.name', 'saved_search_id.api_entity' )
@@ -55,7 +55,7 @@ class Wpcv_Admin_Quick_Search_Displays {
 			}
 			return $displays;
 		} catch ( \Throwable $e ) {
-			return new WP_Error( 'quick_search_discovery', __( 'Autocomplete displays could not be loaded. Please try again.', 'wpcv-admin' ) );
+			return new WP_Error( 'quick_search_discovery', __( 'Autocomplete displays could not be loaded. Please try again.', 'wpcv-admin-ui' ) );
 		}
 	}
 }

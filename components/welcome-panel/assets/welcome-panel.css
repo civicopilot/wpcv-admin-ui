@@ -1,64 +1,64 @@
 /* Style the Welcome Panel and its report cards. */
-#wpcv_admin_widget { display: none !important; }
+#wpcv_admin_ui_widget { display: none !important; }
 
 /* Panel colors and compact header. */
-#wpcv-admin-dashboard {
-	--wpcv-admin-bg-color: var(--crm-wp-menu-background-color, #151515);
-	--wpcv-admin-foreground: #fff;
+#wpcv-admin-ui-welcome-panel {
+	--wpcv-admin-ui-welcome-panel-bg-color: var(--crm-wp-menu-background-color, #151515);
+	--wpcv-admin-ui-welcome-panel-foreground: #fff;
 	box-shadow: 0 1px 7px rgba(0, 0, 0, .2);
 }
 
-#wpcv-admin-dashboard .welcome-panel-header,
-#wpcv-admin-dashboard .welcome-panel-content {
-	background: var(--wpcv-admin-bg-color);
+#wpcv-admin-ui-welcome-panel .welcome-panel-header,
+#wpcv-admin-ui-welcome-panel .welcome-panel-content {
+	background: var(--wpcv-admin-ui-welcome-panel-bg-color);
 }
 
-#wpcv-admin-dashboard .welcome-panel-content {
+#wpcv-admin-ui-welcome-panel .welcome-panel-content {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	min-height: 0;
 }
 
-#wpcv-admin-dashboard .welcome-panel-header {
+#wpcv-admin-ui-welcome-panel .welcome-panel-header {
 	max-width: none;
 	padding: 20px 24px;
 }
 
-#wpcv-admin-dashboard .welcome-panel-header h2,
-#wpcv-admin-dashboard .welcome-panel-header p { color: var(--wpcv-admin-foreground); }
+#wpcv-admin-ui-welcome-panel .welcome-panel-header h2,
+#wpcv-admin-ui-welcome-panel .welcome-panel-header p { color: var(--wpcv-admin-ui-welcome-panel-foreground); }
 
-#wpcv-admin-dashboard .welcome-panel-header h2 { font-size: 24px; }
+#wpcv-admin-ui-welcome-panel .welcome-panel-header h2 { font-size: 24px; }
 
-#wpcv-admin-dashboard .welcome-panel-header p { margin: 6px 0 0; font-size: 16px; }
+#wpcv-admin-ui-welcome-panel .welcome-panel-header p { margin: 6px 0 0; font-size: 16px; }
 
 /* Four report columns on wide screens; narrower layouts below. */
-#wpcv-admin-dashboard .welcome-panel-column-container {
+#wpcv-admin-ui-welcome-panel .welcome-panel-column-container {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
 	gap: 24px;
 	padding: 24px;
 }
 
-#wpcv-admin-dashboard .welcome-panel-column {
+#wpcv-admin-ui-welcome-panel .welcome-panel-column {
 	display: block;
 	width: auto;
 	max-width: none;
 	min-width: 0;
 }
 
-#wpcv-admin-dashboard .welcome-panel-column-content {
+#wpcv-admin-ui-welcome-panel .welcome-panel-column-content {
 	max-width: none;
 	overflow-wrap: anywhere;
 }
 
-#wpcv-admin-dashboard .wpcv-afform-card {
+#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-card {
 	display: flex;
 	align-items: flex-start;
 	gap: 12px;
 }
 
-#wpcv-admin-dashboard .wpcv-afform-card h3 {
+#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-card h3 {
 	min-width: 0;
 	margin: 0;
 	font-size: 15px;
@@ -66,50 +66,50 @@
 	line-height: 1.5;
 }
 
-#wpcv-admin-dashboard .wpcv-afform-details { min-width: 0; }
+#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-details { min-width: 0; }
 
-#wpcv-admin-dashboard .wpcv-afform-card a {
+#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-card a {
 	color: #2271b1;
 	text-decoration: none;
 }
 
-#wpcv-admin-dashboard .wpcv-afform-card a:hover,
-#wpcv-admin-dashboard .wpcv-afform-card a:focus {
+#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-card a:hover,
+#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-card a:focus {
 	color: #135e96;
 	text-decoration: underline;
 }
 
-#wpcv-admin-dashboard .wpcv-afform-card a:focus-visible {
+#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-card a:focus-visible {
 	outline: 2px solid #2271b1;
 	outline-offset: 3px;
 	border-radius: 2px;
 }
 
-#wpcv-admin-dashboard .wpcv-afform-description {
+#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-description {
 	margin: 4px 0 0;
 	color: #50575e;
 	font-size: 13px;
 	line-height: 1.5;
 }
 
-#wpcv-admin-dashboard .wpcv-afform-icon {
+#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-icon {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	flex: 0 0 44px;
 	height: 44px;
 	border-radius: 6px;
-	background: var(--wpcv-admin-bg-color);
-	color: var(--wpcv-admin-foreground);
+	background: var(--wpcv-admin-ui-welcome-panel-bg-color);
+	color: var(--wpcv-admin-ui-welcome-panel-foreground);
 	font-size: 24px;
 	line-height: 1;
 	margin: 0;
 }
 
 @media (max-width: 1100px) {
-	#wpcv-admin-dashboard .welcome-panel-column-container { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	#wpcv-admin-ui-welcome-panel .welcome-panel-column-container { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 782px) {
-	#wpcv-admin-dashboard .welcome-panel-column-container { grid-template-columns: minmax(0, 1fr); }
+	#wpcv-admin-ui-welcome-panel .welcome-panel-column-container { grid-template-columns: minmax(0, 1fr); }
 }

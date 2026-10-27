@@ -3,9 +3,9 @@
 	'use strict';
 	$(function () {
 		// Place the welcome panel above widgets and apply its visibility policy.
-		var panel = $('#wpcv-admin-dashboard');
+		var panel = $('#wpcv-admin-ui-welcome-panel');
 		if (panel.length) {
-			var visibility = $('#wpcv_admin_widget-hide');
+			var visibility = $('#wpcv_admin_ui_widget-hide');
 			var persist = panel.attr('data-persist') === '1';
 			panel.insertBefore('#dashboard-widgets-wrap');
 			if (persist) {
@@ -32,7 +32,7 @@
 
 				// Choose whichever of black or white has the higher contrast ratio.
 				var foreground = (luminance + 0.05) / 0.05 > 1.05 / (luminance + 0.05) ? '#000' : '#fff';
-				panel[0].style.setProperty('--wpcv-admin-foreground', foreground);
+				panel[0].style.setProperty('--wpcv-admin-ui-welcome-panel-foreground', foreground);
 			}
 
 			// Retain the registered widget so WordPress can save its visibility preference.

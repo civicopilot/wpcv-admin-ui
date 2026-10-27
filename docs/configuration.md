@@ -1,8 +1,8 @@
 # Configuration
 
-Single site: Open Settings → WPCV Admin
+Single site: Open Settings → WPCV Admin UI
 
-Multisite: Network Admin → Settings → WPCV Admin on multisite.
+Multisite: Network Admin → Settings → WPCV Admin UI on multisite.
 
 ## Components
 

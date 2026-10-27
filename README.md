@@ -1,4 +1,4 @@
-# WPCV Admin Enhancements
+# WPCV Admin UI
 
 Provides a contact quick search in the admin bar, a configurable welcome panel with CiviCRM report links, and other UI enhancements.
 
@@ -14,7 +14,7 @@ Provides a contact quick search in the admin bar, a configurable welcome panel w
 
 ## Installation
 
-1. Place this plugin in `wp-content/plugins/wpcv-admin` and activate it; network activate on multisite.
+1. Place this plugin in `wp-content/plugins/wpcv-admin-ui` and activate it; network activate on multisite.
 2. Follow the [configuration guide](docs/configuration.md) to set up the features.
 
 ## Roadmap
@@ -28,6 +28,6 @@ Possible next steps, not yet implemented:
 
 ## Developers
 
-It may make sense to port changes from this experimental plugin into the [CiviCRM WordPress plugin](https://lab.civicrm.org/dev/wordpress) or [CiviCRM Admin Utilities](https://github.com/christianwach/civicrm-admin-utilities) after a feature is stable and widely liked.
+It may make sense to port changes from this experimental plugin into the main [CiviCRM WordPress plugin](https://lab.civicrm.org/dev/wordpress) or [CiviCRM Admin Utilities](https://github.com/christianwach/civicrm-admin-utilities) after a feature is stable and widely liked.
 
 For code layout and implementation details, see the [developer guide](docs/developers.md).
