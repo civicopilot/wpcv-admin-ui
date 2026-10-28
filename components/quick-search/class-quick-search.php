@@ -100,8 +100,10 @@ class WPCV_Admin_UI_Quick_Search {
 				return;
 			}
 
-			// CiviCRM supplies Select2, API requests, result formatting and keyboard behavior.
-			Civi::resources()->addCoreResources();
+			// Load CiviCRM autocomplete scripts and styles.
+			Civi::resources()
+				->addBundle( 'coreResources' )
+				->addBundle( 'coreStyles' );
 			self::enqueue_styles();
 			wp_enqueue_script(
 				'wpcv-admin-ui-quick-search',
