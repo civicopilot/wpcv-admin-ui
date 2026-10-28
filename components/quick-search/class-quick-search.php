@@ -117,11 +117,19 @@ class WPCV_Admin_UI_Quick_Search {
 				'placeholder' => __( 'Search contacts', 'wpcv-admin-ui' ),
 				'error' => __( 'Contact search could not load. Please reload the page.', 'wpcv-admin-ui' ),
 			), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ) . ';', 'before' );
+			add_action( 'admin_head', array( __CLASS__, 'restore_civicrm_resources' ), 20 );
 			self::$ready = true;
 		} catch ( \Throwable $e ) {
 			// Keep native CiviCRM search available if resources cannot initialize.
 			self::$ready = false;
 		}
+	}
+
+	/** Keep CiviCRM's resources available when Quick Search needs them. */
+	public static function restore_civicrm_resources() {
+		// CAU removes this callback at priority 10 when disabling the shortcode button.
+		// Restore CiviCRM's original priority of 50.
+		add_action( 'admin_head', array( civi_wp(), 'wp_head' ), 50 );
 	}
 
 	/** Search styles also belong on admin pages without the welcome panel. */
