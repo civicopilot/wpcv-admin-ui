@@ -1,12 +1,10 @@
-/* Style the single toolbar input and SearchKit results. */
-#wpadminbar #wp-admin-bar-wpcv-admin-ui-quick-search { display: block; }
-#wpadminbar #wp-admin-bar-wpcv-admin-ui-quick-search > .ab-item { display: none; }
+/**
+ * Shared search control
+ */
 
-#wpadminbar .wpcv-admin-ui-quick-search {
+:is(#wpadminbar, #wpcv-admin-ui-quick-search-menu) .wpcv-admin-ui-quick-search {
 	position: relative;
-	width: 340px;
 	max-width: 40vw;
-	height: var(--wp-admin--admin-bar--height, 32px);
 	display: flex;
 	align-items: center;
 	padding: 0 8px;
@@ -14,33 +12,27 @@
 	box-sizing: border-box;
 }
 
-#wpadminbar .wpcv-admin-ui-quick-search::before {
+:is(#wpadminbar, #wpcv-admin-ui-quick-search-menu) .wpcv-admin-ui-quick-search::before {
 	content: "\f179";
 	font-family: dashicons;
 	font-size: 16px;
 	position: absolute;
 	left: 16px;
-	color: #c3c4c7;
 	pointer-events: none;
 }
 
-#wpadminbar input#wpcv-admin-ui-quick-search {
+:is(#wpadminbar, #wpcv-admin-ui-quick-search-menu) input#wpcv-admin-ui-quick-search {
 	box-sizing: border-box;
 	width: 100%;
-	height: calc(var(--wp-admin--admin-bar--height, 32px) - 6px);
+	height: calc(100% - 6px);
 	min-height: 0;
 	margin: 0;
 	padding: 0 26px 0 30px;
-	background: #353b41;
-	color: #f0f0f1;
-	border: 1px solid #50575e;
-	border-radius: 6px;
 	font-size: 13px;
-	box-shadow: none;
 }
 
 /* Use Form Builder's spinner while jQuery UI is loading results. */
-#wpadminbar .wpcv-admin-ui-quick-search-spinner {
+:is(#wpadminbar, #wpcv-admin-ui-quick-search-menu) .wpcv-admin-ui-quick-search-spinner {
 	display: none;
 	position: absolute;
 	right: 16px;
@@ -52,20 +44,53 @@
 	font-weight: var(--fa-style, 900);
 	font-size: 14px;
 	line-height: 14px;
-	color: #c3c4c7;
 	pointer-events: none;
 }
 
-#wpadminbar .ui-autocomplete-loading + .wpcv-admin-ui-quick-search-spinner {
+:is(#wpadminbar, #wpcv-admin-ui-quick-search-menu) .ui-autocomplete-loading + .wpcv-admin-ui-quick-search-spinner {
 	display: inline-block;
 }
 
-#wpadminbar input#wpcv-admin-ui-quick-search::placeholder { color: #f0f0f1; opacity: 1; }
+:is(#wpadminbar, #wpcv-admin-ui-quick-search-menu) input#wpcv-admin-ui-quick-search::placeholder { color: inherit; opacity: 1; }
+
+/* Keep native contact search until the replacement initializes. */
+body.wpcv-admin-ui-quick-search-ready #civicrm-menu > #crm-qsearch { display: none; }
+
+/**
+ * WordPress toolbar appearance
+ */
+
+#wpadminbar #wp-admin-bar-wpcv-admin-ui-quick-search { display: block; }
+#wpadminbar #wp-admin-bar-wpcv-admin-ui-quick-search > .ab-item { display: none; }
+#wpadminbar .wpcv-admin-ui-quick-search {
+	width: 300px;
+	height: var(--wp-admin--admin-bar--height, 32px);
+}
+
+#wpadminbar input#wpcv-admin-ui-quick-search {
+	box-shadow: none;
+	background: #353b41;
+	color: #f0f0f1;
+	border: 1px solid #50575e;
+	border-radius: 6px;
+}
+
+#wpadminbar .wpcv-admin-ui-quick-search::before,
+#wpadminbar .wpcv-admin-ui-quick-search-spinner { color: #c3c4c7; }
+
 #wpadminbar input#wpcv-admin-ui-quick-search:focus {
 	border-color: #a7c7e7;
 	outline: 0;
 	box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #2271b1);
 }
+
+@media screen and (max-width: 782px) {
+	#wpadminbar .wpcv-admin-ui-quick-search { width: 260px; }
+}
+
+/**
+ * Shared results and status
+ */
 
 ul.ui-autocomplete.wpcv-admin-ui-quick-search-dropdown {
 	z-index: 100001;
@@ -75,11 +100,11 @@ ul.ui-autocomplete.wpcv-admin-ui-quick-search-dropdown {
 	overflow-x: hidden;
 	padding: 0;
 	margin: 0;
-	background: #fff;
-	color: #1d2327;
-	border: 1px solid #8c8f94;
+	background: var(--crm-input-bg-color);
+	color: var(--crm-text-color);
+	border: var(--crm-input-border);
 	border-radius: 0 0 6px 6px;
-	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+	box-shadow: var(--crm-shadow-popup);
 	font: 13px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 	list-style: none;
 }
@@ -89,24 +114,22 @@ ul.ui-autocomplete.wpcv-admin-ui-quick-search-dropdown {
 	padding: 8px 12px;
 	margin: 0;
 	border: 0;
-	border-bottom: 1px solid #dcdcde;
-	color: #1d2327;
+	border-bottom: var(--crm-border);
+	color: var(--crm-text-color);
 }
 .wpcv-admin-ui-quick-search-dropdown .ui-menu-item-wrapper.ui-state-active {
 	margin: 0;
-	background: #f0f6fc;
-	color: #1d2327;
+	background: var(--crm-input-select-bg-color);
+	color: var(--crm-text-color);
 }
 .wpcv-admin-ui-quick-search-dropdown .crm-select2-row-description p {
-	margin: 2px 0 0;
-	color: #50575e;
-	font-size: 12px;
+	color: var(--crm-text-color);
 	line-height: 1.4;
 	overflow-wrap: anywhere;
 }
 
-/* Status appears below the field only while loading or reporting a problem. */
-#wpadminbar #wpcv-admin-ui-quick-search-status:not([hidden]) {
+/* Status appears below the field for empty results or errors. */
+:is(#wpadminbar, #wpcv-admin-ui-quick-search-menu) #wpcv-admin-ui-quick-search-status:not([hidden]) {
 	position: absolute;
 	top: 100%;
 	left: 8px;
@@ -114,23 +137,16 @@ ul.ui-autocomplete.wpcv-admin-ui-quick-search-dropdown {
 	z-index: 100002;
 	padding: 8px 12px;
 	margin: 0;
-	background: #fff;
-	color: #1d2327;
-	border: 1px solid #8c8f94;
+	background: var(--crm-input-bg-color);
+	color: var(--crm-text-color);
+	border: var(--crm-input-border);
 	font-size: 13px;
 	line-height: 1.5;
 }
 
-@media screen and (max-width: 782px) {
-	#wpadminbar .wpcv-admin-ui-quick-search { width: 260px; }
-}
-
-/* Keep native contact search until the replacement initializes. */
-body.wpcv-admin-ui-quick-search-ready #civicrm-menu > #crm-qsearch { display: none; }
-
 /* A non-selectable hint follows the limited batch of contacts. */
 .wpcv-admin-ui-quick-search-dropdown .wpcv-admin-ui-quick-search-hint {
 	padding: 8px 12px;
-	color: #50575e;
+	color: var(--crm-text-color);
 	font-size: 12px;
 }

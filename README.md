@@ -12,6 +12,8 @@ Provides a contact quick search in the admin bar, a configurable welcome panel w
 - Cleanup CiviCRM menu
 - Shared network settings on multisite, with reports resolved per site.
 
+Quick Search’s WordPress toolbar styling in alpha stage is designed for the Default and Fresh administration color schemes. Other schemes may look less integrated.
+
 ## Installation
 
 1. Place this plugin in `wp-content/plugins/wpcv-admin-ui` and activate it; network activate on multisite.

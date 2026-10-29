@@ -1,0 +1,15 @@
+/* Fit Quick Search into CiviCRM's menu using Riverlea's field styles. */
+#wpcv-admin-ui-quick-search-menu .wpcv-admin-ui-quick-search {
+	width: 260px;
+	height: var(--crm-menubar-height);
+	font-family: inherit;
+}
+
+#wpcv-admin-ui-quick-search-menu .wpcv-admin-ui-quick-search::before,
+#wpcv-admin-ui-quick-search-menu .wpcv-admin-ui-quick-search-spinner {
+	color: var(--crm-input-color);
+}
+
+#civicrm-menu #wpcv-admin-ui-quick-search-menu .wpcv-admin-ui-quick-search-spinner {
+	margin: 0;
+}

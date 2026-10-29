@@ -112,6 +112,13 @@ class WPCV_Admin_UI_Quick_Search {
 				filemtime( __DIR__ . '/assets/quick-search.js' ),
 				true
 			);
+			wp_enqueue_script(
+				'wpcv-admin-ui-quick-search-civicrm-menu',
+				plugin_dir_url( __FILE__ ) . 'assets/quick-search-civicrm-menu.js',
+				array( 'wpcv-admin-ui-quick-search' ),
+				filemtime( __DIR__ . '/assets/quick-search-civicrm-menu.js' ),
+				true
+			);
 			wp_add_inline_script( 'wpcv-admin-ui-quick-search', 'const wpcvAdminUIQuickSearch = ' . wp_json_encode( array(
 				'savedSearch' => $selection['saved_search'],
 				'display' => $selection['display'],
@@ -142,6 +149,13 @@ class WPCV_Admin_UI_Quick_Search {
 			plugin_dir_url( __FILE__ ) . 'assets/quick-search.css',
 			array(),
 			filemtime( __DIR__ . '/assets/quick-search.css' )
+		);
+
+		wp_enqueue_style(
+			'wpcv-admin-ui-quick-search-civicrm-menu',
+			plugin_dir_url( __FILE__ ) . 'assets/quick-search-civicrm-menu.css',
+			array( 'wpcv-admin-ui-quick-search' ),
+			filemtime( __DIR__ . '/assets/quick-search-civicrm-menu.css' )
 		);
 
 	}
