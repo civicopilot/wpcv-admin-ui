@@ -116,7 +116,8 @@ class WPCV_Admin_UI_Quick_Search {
 				'savedSearch' => $selection['saved_search'],
 				'display' => $selection['display'],
 				'contactUrl' => CRM_Utils_System::url( 'civicrm/contact/view', 'reset=1', true, null, false, false, true ),
-				'placeholder' => __( 'Search contacts', 'wpcv-admin-ui' ),
+				'refine' => __( 'Refine your search for more matches.', 'wpcv-admin-ui' ),
+				'noResults' => __( 'No contacts found.', 'wpcv-admin-ui' ),
 				'error' => __( 'Contact search could not load. Please reload the page.', 'wpcv-admin-ui' ),
 			), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ) . ';', 'before' );
 			add_action( 'admin_head', array( __CLASS__, 'restore_civicrm_resources' ), 20 );
@@ -142,6 +143,7 @@ class WPCV_Admin_UI_Quick_Search {
 			array(),
 			filemtime( __DIR__ . '/assets/quick-search.css' )
 		);
+
 	}
 
 	/** Insert after the WordPress logo, before My Sites. */
@@ -158,7 +160,7 @@ class WPCV_Admin_UI_Quick_Search {
 		) );
 	}
 
-	/** Render only the input; CiviCRM builds and manages its dropdown. */
+	/** Render the toolbar input and search status. */
 	public static function render() {
 		if ( self::$ready ) {
 			include __DIR__ . '/templates/control.php';
