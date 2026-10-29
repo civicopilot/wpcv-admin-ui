@@ -20,7 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		// Cancel pending results before moving; preserve the input and its search text.
 		CRM.$(input).triggerHandler('blur');
-		if (useMenu) menu.prepend(slot);
+		if (useMenu) {
+			var logo = menu.querySelector(':scope > li[data-name="Home"]');
+			if (logo) logo.after(slot);
+			else menu.prepend(slot);
+		}
 		target.appendChild(control);
 		if (!useMenu) slot.remove();
 	}
