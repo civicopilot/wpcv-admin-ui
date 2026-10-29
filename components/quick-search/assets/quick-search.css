@@ -93,6 +93,8 @@ body.wpcv-admin-ui-quick-search-ready #civicrm-menu > #crm-qsearch { display: no
  */
 
 ul.ui-autocomplete.wpcv-admin-ui-quick-search-dropdown {
+	/* Keep the results steady while the page scrolls behind the toolbar. */
+	position: fixed;
 	z-index: 100001;
 	box-sizing: border-box;
 	max-height: min(360px, 65vh);
