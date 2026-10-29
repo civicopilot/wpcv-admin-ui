@@ -4,6 +4,7 @@ defined( 'ABSPATH' ) || exit;
 ?>
 			<div class="wpcv-admin-ui-quick-search crm-container">
 				<label class="screen-reader-text" for="wpcv-admin-ui-quick-search"><?php esc_html_e( 'Search contacts', 'wpcv-admin-ui' ); ?></label>
-				<input type="hidden" id="wpcv-admin-ui-quick-search" />
+				<input type="text" id="wpcv-admin-ui-quick-search" placeholder="<?php esc_attr_e( 'Search contacts', 'wpcv-admin-ui' ); ?>" autocomplete="off" spellcheck="false" />
+				<i class="crm-i fa-spinner fa-spin wpcv-admin-ui-quick-search-spinner" aria-hidden="true"></i>
 				<p id="wpcv-admin-ui-quick-search-status" role="status" hidden></p>
 			</div>

@@ -100,8 +100,10 @@ class WPCV_Admin_UI_Quick_Search {
 				return;
 			}
 
-			// CiviCRM supplies Select2, API requests, result formatting and keyboard behavior.
-			Civi::resources()->addCoreResources();
+			// Load CiviCRM autocomplete scripts and styles.
+			Civi::resources()
+				->addBundle( 'coreResources' )
+				->addBundle( 'coreStyles' );
 			self::enqueue_styles();
 			wp_enqueue_script(
 				'wpcv-admin-ui-quick-search',
@@ -114,14 +116,23 @@ class WPCV_Admin_UI_Quick_Search {
 				'savedSearch' => $selection['saved_search'],
 				'display' => $selection['display'],
 				'contactUrl' => CRM_Utils_System::url( 'civicrm/contact/view', 'reset=1', true, null, false, false, true ),
-				'placeholder' => __( 'Search contacts', 'wpcv-admin-ui' ),
+				'refine' => __( 'Refine your search for more matches.', 'wpcv-admin-ui' ),
+				'noResults' => __( 'No contacts found.', 'wpcv-admin-ui' ),
 				'error' => __( 'Contact search could not load. Please reload the page.', 'wpcv-admin-ui' ),
 			), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ) . ';', 'before' );
+			add_action( 'admin_head', array( __CLASS__, 'restore_civicrm_resources' ), 20 );
 			self::$ready = true;
 		} catch ( \Throwable $e ) {
 			// Keep native CiviCRM search available if resources cannot initialize.
 			self::$ready = false;
 		}
+	}
+
+	/** Keep CiviCRM's resources available when Quick Search needs them. */
+	public static function restore_civicrm_resources() {
+		// CAU removes this callback at priority 10 when disabling the shortcode button.
+		// Restore CiviCRM's original priority of 50.
+		add_action( 'admin_head', array( civi_wp(), 'wp_head' ), 50 );
 	}
 
 	/** Search styles also belong on admin pages without the welcome panel. */
@@ -132,6 +143,7 @@ class WPCV_Admin_UI_Quick_Search {
 			array(),
 			filemtime( __DIR__ . '/assets/quick-search.css' )
 		);
+
 	}
 
 	/** Insert after the WordPress logo, before My Sites. */
@@ -148,7 +160,7 @@ class WPCV_Admin_UI_Quick_Search {
 		) );
 	}
 
-	/** Render only the input; CiviCRM builds and manages its dropdown. */
+	/** Render the toolbar input and search status. */
 	public static function render() {
 		if ( self::$ready ) {
 			include __DIR__ . '/templates/control.php';
