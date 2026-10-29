@@ -13,3 +13,8 @@
 #civicrm-menu #wpcv-admin-ui-quick-search-menu .wpcv-admin-ui-quick-search-spinner {
 	margin: 0;
 }
+
+/* Hide CiviCRM's legacy loading GIF to avoid a duplicate spinner. */
+#wpcv-admin-ui-quick-search-menu input#wpcv-admin-ui-quick-search.ui-autocomplete-loading {
+	background: var(--crm-input-bg-color);
+}
