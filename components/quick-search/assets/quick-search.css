@@ -63,7 +63,7 @@ body.wpcv-admin-ui-quick-search-ready #civicrm-menu > #crm-qsearch { display: no
 #wpadminbar #wp-admin-bar-wpcv-admin-ui-quick-search { display: block; }
 #wpadminbar #wp-admin-bar-wpcv-admin-ui-quick-search > .ab-item { display: none; }
 #wpadminbar .wpcv-admin-ui-quick-search {
-	width: 340px;
+	width: 300px;
 	height: var(--wp-admin--admin-bar--height, 32px);
 }
 
