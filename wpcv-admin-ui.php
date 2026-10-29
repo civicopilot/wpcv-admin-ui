@@ -11,7 +11,7 @@
  * Plugin Name:       WPCV Admin UI
  * Plugin URI:        https://github.com/civicopilot/wpcv-admin-ui
  * Description:       Adds a configurable CiviCRM report welcome panel, quick search, and dashboard enhancements to WordPress
- * Version:           0.1
+ * Version:           0.2
  * Requires Plugins:  civicrm
  * Author:            Andy Burns
  * Author URI:        https://civicopilot.com/
@@ -29,7 +29,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Plugin asset and release version.
  */
-define( 'WPCV_ADMIN_UI_VERSION', '0.1' );
+define( 'WPCV_ADMIN_UI_VERSION', '0.2' );
 
 /** Load the component coordinator. */
 require plugin_dir_path( __FILE__ ) . 'includes/class-wpcv-admin-ui.php';

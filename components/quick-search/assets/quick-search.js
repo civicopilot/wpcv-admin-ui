@@ -116,6 +116,17 @@ document.addEventListener('DOMContentLoaded', function () {
 		};
 		widget._resizeMenu = function () { this.menu.element.outerWidth($input.outerWidth()); };
 
+		// Keep results anchored to the toolbar input when the page moves.
+		function positionResults(event) {
+			var menu = widget.menu.element;
+			if (event.type === 'scroll' && (event.target === input || menu[0].contains(event.target))) return;
+			if (!menu.is(':visible')) return;
+			if (event.type === 'resize') menu.outerWidth($input.outerWidth());
+			menu.position($.extend({of: $input}, $input.autocomplete('option', 'position')));
+		}
+		window.addEventListener('scroll', positionResults, true);
+		window.addEventListener('resize', positionResults);
+
 		$input.on('input', cancel).on('blur', cancel).on('keydown', function (event) {
 			if (event.key === 'Escape') cancel();
 		}).on('focus', function () {

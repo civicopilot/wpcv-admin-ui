@@ -51,7 +51,7 @@
 	display: inline-block;
 }
 
-:is(#wpadminbar, #wpcv-admin-ui-quick-search-menu) input#wpcv-admin-ui-quick-search::placeholder { color: inherit; opacity: 1; }
+:is(#wpadminbar, #wpcv-admin-ui-quick-search-menu) input#wpcv-admin-ui-quick-search::placeholder { color: inherit; opacity: 0.75; }
 
 /* Keep native contact search until the replacement initializes. */
 body.wpcv-admin-ui-quick-search-ready #civicrm-menu > #crm-qsearch { display: none; }
@@ -93,6 +93,8 @@ body.wpcv-admin-ui-quick-search-ready #civicrm-menu > #crm-qsearch { display: no
  */
 
 ul.ui-autocomplete.wpcv-admin-ui-quick-search-dropdown {
+	/* Keep the results steady while the page scrolls behind the toolbar. */
+	position: fixed;
 	z-index: 100001;
 	box-sizing: border-box;
 	max-height: min(360px, 65vh);
@@ -122,8 +124,13 @@ ul.ui-autocomplete.wpcv-admin-ui-quick-search-dropdown {
 	background: var(--crm-input-select-bg-color);
 	color: var(--crm-text-color);
 }
-.wpcv-admin-ui-quick-search-dropdown .crm-select2-row-description p {
-	color: var(--crm-text-color);
+/* Distinguish contact names from their secondary details. */
+.wpcv-admin-ui-quick-search-dropdown .crm-select2-row-label {
+	font-weight: 500;
+}
+.crm-container.wpcv-admin-ui-quick-search-dropdown .crm-select2-row-description p {
+	font-size: 11px;
+	color: color-mix(in srgb, var(--crm-text-color) 75%, var(--crm-input-bg-color));
 	line-height: 1.4;
 	overflow-wrap: anywhere;
 }
