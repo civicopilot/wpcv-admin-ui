@@ -72,7 +72,7 @@ body.wpcv-admin-ui-quick-search-ready #civicrm-menu > #crm-qsearch { display: no
 	background: #353b41;
 	color: #f0f0f1;
 	border: 1px solid #50575e;
-	border-radius: 6px;
+	border-radius: var(--crm-input-border-radius);
 }
 
 #wpadminbar .wpcv-admin-ui-quick-search::before,
