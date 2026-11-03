@@ -15,7 +15,13 @@ class WPCV_Admin_UI_Welcome_Panel {
 
 	/** Provide initial panel values without overwriting saved settings. */
 	public static function defaults() {
-		return array( 'welcome_panel_enabled' => true, 'subheading' => __( 'Start with these reports to plan your follow-ups', 'wpcv-admin-ui' ), 'background_color' => '#151515', 'afforms' => array(), 'persist_panel' => true, 'heading' => __( 'Reports', 'wpcv-admin-ui' ) );
+		return array(
+			'welcome_panel_enabled' => true,
+			'subheading' => __( 'Quick links to manage your site.', 'wpcv-admin-ui' ),
+			'background_color' => '#151515',
+			'afforms' => array(),
+			'persist_panel' => true,
+		);
 	}
 
 	/** Keep appearance and report configuration together. */
@@ -48,12 +54,41 @@ class WPCV_Admin_UI_Welcome_Panel {
 
 	/** Determine whether the current user should see the custom welcome panel. */
 	public static function user_can_view_panel() {
-		return current_user_can( 'access_civicrm' );
+		return current_user_can( 'access_civicrm' ) || ! empty( self::get_sections() );
 	}
 
 	/** Remove the core WordPress welcome panel. */
 	public static function remove_core_welcome_panel() {
 		remove_action( 'welcome_panel', 'wp_welcome_panel' );
+	}
+
+	/** Get optional task sections. Providers resolve destinations and check permissions. */
+	public static function get_sections() {
+		/**
+		 * Supply sections before the configured reports.
+		 *
+		 * @param array $sections Sections with title, description, and items.
+		 *                        Items use title, description, url, and optional primary and dashicon values.
+		 */
+		$sections = apply_filters( 'wpcv_admin_ui/welcome_panel/site_management_links', array() );
+		$visible = array();
+		foreach ( (array) $sections as $section ) {
+			if ( ! is_array( $section ) || empty( $section['title'] ) ) {
+				continue;
+			}
+			$items = array();
+			foreach ( (array) ( $section['items'] ?? array() ) as $item ) {
+				if ( ! is_array( $item ) || empty( $item['title'] ) || empty( $item['url'] ) || ! esc_url( $item['url'] ) ) {
+					continue;
+				}
+				$items[] = wp_parse_args( $item, array( 'description' => '', 'primary' => false, 'dashicon' => '' ) );
+			}
+			if ( $items ) {
+				$section['items'] = $items;
+				$visible[] = wp_parse_args( $section, array( 'description' => '' ) );
+			}
+		}
+		return $visible;
 	}
 
 	/** Render the custom welcome panel. */
@@ -63,9 +98,23 @@ class WPCV_Admin_UI_Welcome_Panel {
 		}
 
 		// Resolve settings and current-user report data before rendering.
-		$settings         = WPCV_Admin_UI_Settings::get_settings();
-		$heading          = is_string( $settings['heading'] ) ? $settings['heading'] : '';
-		$cards            = WPCV_Admin_UI_Cards::get_cards();
+		$user = wp_get_current_user();
+		$first_name = trim( (string) $user->first_name );
+		/**
+		 * Customize the greeting displayed to the current user.
+		 *
+		 * @param string $heading Personalized greeting text.
+		 */
+		$heading = apply_filters( 'wpcv_admin_ui/welcome_panel/greeting', sprintf(
+			/* translators: 1: User's first or display name. 2: Site title. */
+			__( 'Hi %1$s — your %2$s dashboard', 'wpcv-admin-ui' ),
+			'' !== $first_name ? $first_name : $user->display_name,
+			get_bloginfo( 'name' )
+		) );
+		$heading = is_string( $heading ) ? $heading : '';
+		$sections         = self::get_sections();
+		$show_reports     = current_user_can( 'access_civicrm' );
+		$cards            = $show_reports ? WPCV_Admin_UI_Cards::get_cards() : array();
 		$subheading       = WPCV_Admin_UI_Welcome_Panel_Settings::get_subheading();
 		$background_color = WPCV_Admin_UI_Welcome_Panel_Settings::get_background_color();
 

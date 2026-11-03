@@ -22,3 +22,51 @@ templates, and assets.
 Use `wpcv-admin-ui-` for plugin-owned HTML/CSS names and asset handles,
 `wpcv_admin_ui_` for PHP markers, and `wpcvAdminUI` for JavaScript globals.
 Classes use `WPCV_Admin_UI_`; local variables and component filenames stay descriptive and concise.
+
+## Welcome panel
+
+Replaces default WP Welcome Panel.
+
+### Welcome greeting
+
+Use `wpcv_admin_ui/welcome_panel/greeting` to customize the greeting. Return an empty string to hide it.
+
+### Site management links
+
+Use `wpcv_admin_ui/welcome_panel/site_management_links` in your own plugin
+or theme to add links above Reports, such as shortcuts to custom settings pages.
+The example adds homepage editing and user management links when the current user
+has permission. Change the labels and URLs to suit your site.
+
+```php
+add_filter( 'wpcv_admin_ui/welcome_panel/site_management_links', function ( $sections ) {
+	$items = array();
+	$homepage_id = 'page' === get_option( 'show_on_front' ) ? (int) get_option( 'page_on_front' ) : 0;
+	if ( $homepage_id && current_user_can( 'edit_post', $homepage_id ) ) {
+		$url = get_edit_post_link( $homepage_id, 'raw' );
+		if ( $url ) {
+			$items[] = array(
+				'title'       => __( 'Edit homepage', 'your-text-domain' ),
+				'description' => __( 'Update your homepage content.', 'your-text-domain' ),
+				'url'         => $url,
+				'primary'     => true,
+			);
+		}
+	}
+	if ( current_user_can( 'list_users' ) ) {
+		$items[] = array(
+			'title'       => __( 'Manage users', 'your-text-domain' ),
+			'description' => __( 'Review who has access to this site and their assigned roles.', 'your-text-domain' ),
+			'url'         => admin_url( 'users.php' ),
+			'dashicon'    => 'dashicons-admin-users',
+		);
+	}
+	if ( $items ) {
+		$sections[] = array(
+			'title' => __( 'Manage your site', 'your-text-domain' ),
+			'items' => $items,
+		);
+	}
+	return $sections;
+} );
+```

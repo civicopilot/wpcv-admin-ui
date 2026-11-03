@@ -30,10 +30,14 @@ Users see reports they can access. On multisite, selections are shared across th
 
 ## Customize the panel
 
-- **Heading:** replaces the default "Reports" title.
 - **Welcome message:** optional guidance; leave blank to omit it.
 - **Background color:** applies to the header and icon boxes, with automatic light or dark foreground contrast.
 - **Keep welcome panel visible:** enabled by default. Turn it off to let users hide or restore the panel through Screen Options.
+
+### Welcome greeting and message
+
+The heading automatically greets the current user by first name (or display name
+when blank) and includes the current site's Site Title.
 
 ## UI Enhancements
 

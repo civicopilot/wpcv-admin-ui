@@ -1,110 +1,58 @@
-/* Style the Welcome Panel and its report cards. */
+/* The widget is a Screen Options shell; JavaScript moves its panel above the widgets. */
 #wpcv_admin_ui_widget { display: none !important; }
 
-/* Panel colors and compact header. */
 #wpcv-admin-ui-welcome-panel {
 	--wpcv-admin-ui-welcome-panel-bg-color: var(--crm-wp-menu-background-color, #151515);
 	--wpcv-admin-ui-welcome-panel-foreground: #fff;
 	box-shadow: 0 1px 7px rgba(0, 0, 0, .2);
 }
 
-#wpcv-admin-ui-welcome-panel .welcome-panel-header,
+/* Keep core's layout, with a compact header and no minimum panel height. */
 #wpcv-admin-ui-welcome-panel .welcome-panel-content {
-	background: var(--wpcv-admin-ui-welcome-panel-bg-color);
-}
-
-#wpcv-admin-ui-welcome-panel .welcome-panel-content {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
 	min-height: 0;
+	justify-content: flex-start;
 }
 
 #wpcv-admin-ui-welcome-panel .welcome-panel-header {
 	max-width: none;
-	padding: 20px 24px;
+	padding: 18px 24px;
+	background: var(--wpcv-admin-ui-welcome-panel-bg-color);
+	color: var(--wpcv-admin-ui-welcome-panel-foreground);
 }
 
-#wpcv-admin-ui-welcome-panel .welcome-panel-header h2,
-#wpcv-admin-ui-welcome-panel .welcome-panel-header p { color: var(--wpcv-admin-ui-welcome-panel-foreground); }
+#wpcv-admin-ui-welcome-panel h2 { font-size: clamp(24px, 1vw, 28px); }
+#wpcv-admin-ui-welcome-panel h3 { font-size: inherit; font-weight: inherit; }
+#wpcv-admin-ui-welcome-panel .welcome-panel-header p { font-size: 16px; }
 
-#wpcv-admin-ui-welcome-panel .welcome-panel-header h2 { font-size: 24px; }
-
-#wpcv-admin-ui-welcome-panel .welcome-panel-header p { margin: 6px 0 0; font-size: 16px; }
-
-/* Four report columns on wide screens; narrower layouts below. */
+/* Retain a left-aligned grid when core switches to centered flex above 1600px. */
 #wpcv-admin-ui-welcome-panel .welcome-panel-column-container {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 24px;
-	padding: 24px;
+	border: 0;
+	border-radius: 0;
 }
 
-#wpcv-admin-ui-welcome-panel .welcome-panel-column {
-	display: block;
-	width: auto;
-	max-width: none;
-	min-width: 0;
-}
-
-#wpcv-admin-ui-welcome-panel .welcome-panel-column-content {
-	max-width: none;
-	overflow-wrap: anywhere;
-}
-
-#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-card {
-	display: flex;
-	align-items: flex-start;
-	gap: 12px;
-}
-
-#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-card h3 {
-	min-width: 0;
-	margin: 0;
-	font-size: 15px;
-	font-weight: 600;
-	line-height: 1.5;
-}
-
-#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-details { min-width: 0; }
-
-#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-card a {
-	color: #2271b1;
-	text-decoration: none;
-}
-
-#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-card a:hover,
-#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-card a:focus {
-	color: #135e96;
-	text-decoration: underline;
-}
-
-#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-card a:focus-visible {
-	outline: 2px solid #2271b1;
-	outline-offset: 3px;
-	border-radius: 2px;
-}
-
-#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-description {
-	margin: 4px 0 0;
-	color: #50575e;
-	font-size: 13px;
-	line-height: 1.5;
-}
-
+/* Only CiviCRM's font icons need a substitute for core's fixed-size SVG icons. */
 #wpcv-admin-ui-welcome-panel .wpcv-admin-ui-afform-icon {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	flex: 0 0 44px;
+	display: grid;
+	place-items: center;
+	width: 44px;
 	height: 44px;
+	margin: 0;
 	border-radius: 6px;
 	background: var(--wpcv-admin-ui-welcome-panel-bg-color);
 	color: var(--wpcv-admin-ui-welcome-panel-foreground);
 	font-size: 24px;
-	line-height: 1;
-	margin: 0;
 }
+
+#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-section-heading {
+	background: #fff;
+	color: #1d2327;
+	border-top: 1px solid #dcdcde;
+	padding-bottom: 0;
+}
+
+#wpcv-admin-ui-welcome-panel .wpcv-admin-ui-section-heading h2 { font-size: 20px; }
 
 @media (max-width: 1100px) {
 	#wpcv-admin-ui-welcome-panel .welcome-panel-column-container { grid-template-columns: repeat(2, minmax(0, 1fr)); }

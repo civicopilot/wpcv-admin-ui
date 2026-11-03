@@ -1,16 +1,36 @@
 <?php
-/** Display the Welcome Panel heading, message, and report cards. */
+/** Display optional task sections followed by the configured reports. */
 defined( 'ABSPATH' ) || exit;
 ?>
 		<div id="wpcv-admin-ui-welcome-panel" class="welcome-panel" data-persist="<?php echo empty( WPCV_Admin_UI_Settings::get_settings()['persist_panel'] ) ? '0' : '1'; ?>" style="display:none; <?php echo esc_attr( $background_style ); ?>">
 		<div class="welcome-panel-content">
-			<div class="welcome-panel-header">
-				<?php if ( '' !== trim( $heading ) ) : ?>
-					<h2><?php echo esc_html( $heading ); ?></h2>
+			<?php if ( '' !== trim( $heading ) || '' !== trim( $subheading ) ) : ?>
+				<div class="welcome-panel-header">
+					<?php if ( '' !== trim( $heading ) ) : ?>
+						<h2><?php echo esc_html( $heading ); ?></h2>
+					<?php endif; ?>
+					<?php if ( '' !== trim( $subheading ) ) : ?>
+						<p><?php echo esc_html( $subheading ); ?></p>
+					<?php endif; ?>
+				</div>
+			<?php endif; ?>
+
+			<?php foreach ( $sections as $section ) : ?>
+				<?php if ( count( $sections ) > 1 ) : ?>
+					<div class="welcome-panel-header wpcv-admin-ui-section-heading">
+						<h2><?php echo esc_html( $section['title'] ); ?></h2>
+						<?php if ( '' !== $section['description'] ) : ?>
+							<p><?php echo esc_html( $section['description'] ); ?></p>
+						<?php endif; ?>
+					</div>
 				<?php endif; ?>
-				<?php if ( '' !== trim( $subheading ) ) : ?>
-					<p><?php echo esc_html( $subheading ); ?></p>
-				<?php endif; ?>
+				<?php include __DIR__ . '/site-management.php'; ?>
+			<?php endforeach; ?>
+
+			<?php if ( $show_reports ) : ?>
+			<div class="welcome-panel-header wpcv-admin-ui-section-heading">
+				<h2><?php esc_html_e( 'Reports', 'wpcv-admin-ui' ); ?></h2>
+				<p><?php esc_html_e( 'Review submissions and follow up.', 'wpcv-admin-ui' ); ?></p>
 			</div>
 
 			<div class="welcome-panel-column-container">
@@ -51,21 +71,10 @@ defined( 'ABSPATH' ) || exit;
 					</div>
 				<?php else : ?>
 					<?php foreach ( $cards as $card ) : ?>
-						<div class="welcome-panel-column">
-							<div class="welcome-panel-column-content wpcv-admin-ui-afform-card">
-								<?php if ( ! empty( $card['icon'] ) ) : ?>
-									<i class="crm-i <?php echo esc_attr( $card['icon'] ); ?> wpcv-admin-ui-afform-icon" aria-hidden="true"></i>
-								<?php endif; ?>
-								<div class="wpcv-admin-ui-afform-details">
-									<h3><a href="<?php echo esc_url( $card['url'] ); ?>"><?php echo esc_html( $card['title'] ); ?></a></h3>
-									<?php if ( '' !== $card['description'] ) : ?>
-										<p class="wpcv-admin-ui-afform-description"><?php echo esc_html( $card['description'] ); ?></p>
-									<?php endif; ?>
-								</div>
-							</div>
-						</div>
+						<?php include __DIR__ . '/card.php'; ?>
 					<?php endforeach; ?>
 				<?php endif; ?>
 			</div>
+			<?php endif; ?>
 		</div>
 		</div>
