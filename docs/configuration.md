@@ -30,10 +30,14 @@ Users see reports they can access. On multisite, selections are shared across th
 
 ## Customize the panel
 
-- **Heading:** replaces the default "Reports" title.
 - **Welcome message:** optional guidance; leave blank to omit it.
 - **Background color:** applies to the header and icon boxes, with automatic light or dark foreground contrast.
 - **Keep welcome panel visible:** enabled by default. Turn it off to let users hide or restore the panel through Screen Options.
+
+The greeting automatically uses the user's first or display name and site title.
+
+Companion plugins can add permission-based site links above Reports, such as a Site Guide, edit homepage and Help. These are configured
+[in code](developers.md#site-management-example). Users without CiviCRM access see site links only.
 
 ## UI Enhancements
 

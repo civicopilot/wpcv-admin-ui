@@ -18,10 +18,11 @@
 			visibility.on('change', updateVisibility);
 			updateVisibility();
 
-			// Resolve the CSS variable in the browser, including the CiviCRM theme default.
+			// Resolve the configured palette from the greeting or a report icon.
 			var context = document.createElement('canvas').getContext('2d');
-			if (context) {
-				context.fillStyle = window.getComputedStyle(panel.find('.welcome-panel-header')[0]).backgroundColor;
+			var colorSource = panel.find('.welcome-panel-header').not('.wpcv-admin-ui-section-heading')[0] || panel.find('.wpcv-admin-ui-afform-icon')[0];
+			if (context && colorSource) {
+				context.fillStyle = window.getComputedStyle(colorSource).backgroundColor;
 				context.fillRect(0, 0, 1, 1);
 				var pixel = context.getImageData(0, 0, 1, 1).data;
 				var channels = Array.from(pixel).slice(0, 3).map(function (value) {
