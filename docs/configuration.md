@@ -17,6 +17,8 @@ when that extension is enabled and no choice has been saved, its accessible disp
 
 ## Welcome Panel: Reports Configuration
 
+Requires the CiviCRM core extension `civicrm_search_ui` to select "Reports listing" placement.
+
 1. In CiviCRM Form Builder:
 
    - Add your Search Display to a **form**.
