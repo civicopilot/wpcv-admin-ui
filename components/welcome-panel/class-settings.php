@@ -19,7 +19,6 @@ class WPCV_Admin_UI_Welcome_Panel_Settings {
 			return $names;
 		}
 		return array(
-			'heading' => isset( $post['heading'] ) && is_string( $post['heading'] ) ? sanitize_text_field( $post['heading'] ) : '',
 			'afforms' => $names,
 			'persist_panel' => isset( $post['persist_panel'] ) && '1' === $post['persist_panel'],
 			'subheading' => isset( $post['subheading'] ) && is_string( $post['subheading'] ) ? sanitize_text_field( $post['subheading'] ) : '',
